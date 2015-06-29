@@ -1,0 +1,86 @@
+<?php
+    $action = $controller -> getParam(1);
+    $id = (int)$controller -> getParam(2);
+?>
+<tr>
+<td class='head'>
+<?php
+    $tut = 'category';
+    include "menu.php"; 
+    $db = db :: getInstance();   
+    $form = new ad();
+?>
+<script type="text/javascript">
+$(document).ready(function(){
+    $('#save').on('click',function(){
+    $("#form").ajaxSubmit({success: function(responseText){
+            // window.location.href = "/admin/#"+$('input[name="id"]').val();  
+            console.log($('#change'));
+            $('#change').html(responseText);
+    }
+
+})
+
+})
+    $("#parent [value='"+$('#razd_sel').val()+"']").attr("selected", "selected");
+})
+</script> 
+</td>
+</tr>
+<tr><td><div id="content">
+<div id="change">
+<?php
+	if(($action == 'edit' and $id) or $action=='add'){
+		echo '<style>.td-'.$id.'{background:silver;color:red;} .td-'.$id.' a{color:red}</style>';
+    if ($action == 'edit') $edit=mysql_fetch_array(mysql_query("select * from menu where id={$id}"));
+    echo '<form method="POST" action="views/admin/ajax/categories/categorySave.php" enctype="multipart/form-data" name="edit" id="form"><div class="down"><b>Редактор</b><br /><br />';
+        echo '<table>';
+        echo '<tr>';
+        echo '<td>Название раздела:<br><span class="help">Максимальная длина 80 символов</span></td>';
+        echo '<td><input style="width:700px;" type="text" maxlength="80" name="caption" value="'.$edit['caption'].'"/></td>';
+        echo '</tr><tr>';
+        echo '<td>Родительский раздел:<br><span class="help">Выберите "нет" если это корневой раздел</span></td>';
+        echo '<td>';
+        echo "<select  style='width:700px;' name='parent' id='parent'><option value='0'>Нет</option>";                    
+                    $db -> query('SELECT * FROM  menu WHERE id!=25');
+                    $parents = $db -> getArray();
+                    foreach($parents as $parent){
+                    echo "<option value='".$parent['id']."'>".$parent['caption']."</option>";                  
+                    }
+                echo "</select>";
+                echo "<input type='hidden' id='razd_sel' name='razd_sel' value='".$edit['parentId']."'/>";
+        echo '</td>';        
+        echo '</tr><tr>';
+        echo '<td>Ссылка:<br><span class="help">Редактируйте это поле ТОЛЬКО если знаете что делаете</span></td>';
+        echo '<td><input style="width:700px;" type="text" name="link" value="'.$edit['link'].'"/></td>';
+        echo '</tr><tr>';
+        echo '<td>Приоритет:<br><span class="help">Определяет порядок вывода в меню.<br> Чем меньше - тем выше. </span></td>';
+        echo '<td><input style="width:700px;" type="text" name="num" value="'.$edit['num'].'"/></td>';
+        echo '</tr><tr>';
+        echo '<td>Показывать</td>';
+        $show = ($edit['visibility']) ? 'checked="checked"' : '';
+        echo '<td><input style="width:700px;" type="checkbox" name="show" '.$show.'"/></td>';
+        echo '</tr><tr>';
+        echo '<td colspan="2">';
+        echo '<input type="button" id="save" name="save" value="Сохранить" />';
+        echo '<input type="hidden" name="id" value="'.$id.'"><br /><br />';
+        echo '</td></tr>';
+        echo '</table>';
+    echo'</div></form>';
+	}
+?>
+
+
+</div>
+	<table style="width:100%">
+	<?php $db->query("SELECT * FROM menu ");
+		$categories = $db->getArray();
+		foreach ($categories as $category) {
+	?>	
+		<tr>
+			<td class='td_<?php echo $category['id'];?>'><?php echo $category['caption']?></td>
+			<td><?php echo '<a href="admin/category/edit/'.$category['id'].'">Редактировать</a>';?></td>
+		</tr>
+	<?php }?>
+	</table>
+</div></td></tr>

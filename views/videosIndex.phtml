@@ -1,0 +1,28 @@
+<?php
+    $page->setTitle("GEA | Видео");
+    $page -> addScript('js/video.js');
+    $page -> setDescription("GEA видео, GEA презентация, ГЕА видео, ГЕА презентация, Сетевая компания, Сетевой маркетинг МЛМ, GEA International Group, Гнетнева  Елена Алексеевна, Маркетинг план, Сетевой маркетинг план, Вознаграждения, Бонусы, Контракты.");
+
+    //require_once "classes/class.video.php";
+    //$video = new Video();
+?>
+<div class='productCaption'>Видеоматериалы</div>
+<?php
+$q=mysql_query("select * from video order by date desc limit 0, 10");
+while ($v=mysql_fetch_array($q))
+{
+    if (preg_match('/object|iframe/is', $v['link']))
+    {
+        echo '<div class="video-unit">';
+            echo '<a class="look-video">Смотреть</a>';
+            echo '<div class="e-title vid"><a class="e-title-a">'.$v['name'].'</a></div>';
+            echo '<div class="hidden">';
+                echo '<div style="margin-left:40px;margin-bottom:80px;">';
+                    echo $v['link'];
+                echo '</div>';
+            echo '</div>';
+        echo '</div>';
+    }
+}
+?>
+<div id="s10" class="show-more">Показать еще</div>

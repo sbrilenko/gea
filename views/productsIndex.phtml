@@ -1,0 +1,86 @@
+<script type="text/javascript" src="/js/scrollTo.js"></script>
+
+<script>
+$(document).ready(function(){
+    var id=0;
+    $('.show').live('click',function(){
+        id=$(this).attr('id').split('_')[1];
+        if ($('#d_'+id).css('display')=='none')
+        {
+            console.log('show');
+            $('#d_'+id).slideDown('normal',function(){$.scrollTo('#t_'+id, 1000);});
+            $(this).find('div').css('background-position','-18px 0px');
+            $('.show#t_'+id).css('color','#DC0000');
+        }
+        else
+        {
+            console.log('hide');
+            $('#d_'+id).slideUp('normal',function(){$.scrollTo('.show:first', 1000);});
+            $(this).find('div').css('background-position','0px 0px');
+            $('.show#t_'+id).css('color','#000');
+        }
+        })
+        
+        $('.show').live('mouseover',function(){id=$(this).attr('id').split('_')[1];if ($('#d_'+id).css('display')=='none')$(this).css('color','#DC0000');})
+        $('.show').live('mouseout',function(){id=$(this).attr('id').split('_')[1];if ($('#d_'+id).css('display')=='none')$(this).css('color','#000');})
+        
+        
+        $('.good').each(function(){
+            //console.log($(this).find('.height').height());
+            if ($(this).find('.height').height()>25)
+            {
+                h=$(this).find('.height').height();
+                dataClass=$(this).find('.height').attr('data-class');//alert(dataClass);
+                $('span[data-class="'+dataClass+'"]').height(h);
+                //num=$(this).attr('id').split('_')[1];
+                //alert(num);
+                //if (num%2!=0) $(this).next().find('.height').height(h);
+                //else $(this).prev().find('.height').height(h);
+                //$(this).parent().parent().findNext('.height').height(h);
+            } 
+        })
+})
+
+</script>
+
+<?php if (($_SERVER['REQUEST_URI']==='/products/')or(($_SERVER['REQUEST_URI']==='/products'))){?>
+
+<?php $page->setTitle("GEA | Продукция");?>
+<div class='productCaption'>Продукция</div>
+<?php
+$q=mysql_query("select * from prod where showProd=1 order by RAND()");
+$j=0;
+while($good=mysql_fetch_array($q))
+{
+    $i++;
+  //if ($_SESSION['authorized']==='ok') echo '&nbsp;&nbsp;&nbsp;<a target="_blank" href="http://gea.net.ua/editor/prod.php?editid='.$good['id'].'" style="color:red">Edit</a>';
+    echo '
+    <div class="good" id="num_'.$i.'" ';if(!$good['doc']) echo 'style="text-align:left"';echo'>
+        <a data-class="'.$j.'" class="productCaption productCaptionCatalogue" href="products/info/full/'.$good['id'].'"><span data-class="'.$j.'" class="height">'.$good['name'].'</span>';echo'
+        <span style="display:block;width:322px; max-height:348px;height:348px;margin: 20px auto 0;"><img style="float: left;margin-bottom:20px" src="'; $tmp = explode('_',$good['img']); echo ($tmp[1] =='site.jpg') ? 'catalog/img/prod/'.$good['img'] : 'img/prod/'.$good['img']; echo '" alt="'.$good['name'].'" title="'.$good['name'].'" width="322px" /></span></a>';
+        echo '<a class="links" ';if(!$good['doc']) echo 'style="margin-left:46px"';echo' href="products/info/full/'.$good['id'].'">&nbsp;&nbsp;Подробнее&nbsp;&nbsp;&nbsp;</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+        if ($good['doc']){echo '<a class="links" href="products/info/doc/'.$good['id'].'">Документация&nbsp;</a>';}
+        echo '</div>';   
+    if (!($i%3))
+    {
+        echo '<span class="remove_for_two" style="display:none"><div style="clear: both;"></div><div class="bolshoy-plus"></div><div class="bolshoy-plus2"></div><div style="clear: both;"></div></span>';
+        $j++;
+    }
+    if (!($i%2)) echo '<span class="add_for_two" style="display:none"><div style="clear: both;"></div><div class="bolshoy-plus"></div><div style="clear: both;"></div></span>';
+}
+if ($idcat) $num=mysql_num_rows(mysql_query("select * from prod where id_razd=".$idcat));
+if (!($num%3)) {echo '<div style="width: 10px;height: 40px;margin:-50px auto 0 ;background: #fff;"></div>';}
+?>
+<!--<p class='bold'>Друзья и коллеги!</p>
+<p>В настоящее время люди всё яснее понимают, что в условиях тотального загрязнения окружающей среды состояние здоровья человека катастрофически ухудшается. В водопроводных трубах течёт техническая вода, которой даже мыться нельзя, в воздухе - смог, в продуктах - практически полное отсутствие полезных веществ, зато полное присутствие вредных (красители, консерванты, ГМО, стимуляторы роста, антибиотики и многое другое, о чём мы просто не знаем или предпочитаем не знать).</p>
+<p>Современный фармакологический бизнес и множество аптек никак не способствуют уменьшению количества больных.</p>
+<p>А ведь человек может жить долго и счастливо, используя то, что ему даёт природа в виде натуральных фитокомплексов, рецепты приготовления, которых зачастую пришли к нам из глубины веков.</p>
+<p>В странах Европы, Японии, Америке уже много десятилетий люди пользуются натуральными оздоровительными комплексами, так называемыми БАДами. И в отличие от наших соотечественников, живут на 15-20 лет дольше.</p>
+<p>А инновационные технологии позволяют защитить наш организм от отрицательного внешнего энергетического смога.</p>
+<p>Именно поэтому, подбирая продукцию для всех нас, мы опирались на необходимость создания системы восстановления здоровья человека, начиная от очищения, восстановления энергетического потенциала, заканчивая восполнением дефицита витаминов, микроэлементов, биологически активных веществ, без которых невозможна нормальная работа всех органов и систем организма.</p>
+<p>С удовольствием представляем Вашему вниманию замечательную продукцию, которая, безусловно, поможет Вам быть молодыми, здоровыми и красивыми так долго, как Вам этого хочется.</p>
+-->
+<?php }?>
+
+
+<div style="clear: both;" ></div>

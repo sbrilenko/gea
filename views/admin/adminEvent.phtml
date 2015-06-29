@@ -1,0 +1,273 @@
+<?php $root=$_SERVER['DOCUMENT_ROOT'];
+    $action = $controller -> getParam(1);
+    $id = (int)$controller -> getParam(2);
+?>
+<tr>
+<td class='head'>
+<?php
+    $tut = 'event';
+    include "menu.php"; 
+    $db = db :: getInstance();   
+    $form = new ad();
+?>
+</td>
+</tr>
+<tr>
+    <td>
+        <div id="content">
+            <div id="change">
+<script>
+    $(document).ready(function(){
+        (function($) {
+  $.fn.wrapSelected = function(open, close) {
+    return this.each(function() {
+      var textarea = $(this);
+      var value = textarea.val();
+      var start = textarea[0].selectionStart;
+      var end = textarea[0].selectionEnd;
+      if (value.substring(start, end)!=0)
+      textarea.val(
+        value.substr(0, start) +
+        open + value.substring(start, end) + close +
+        value.substring(end, value.length)
+      );
+    });
+  };
+})(jQuery);
+
+        $('input[name="save"]').live('click',function(){//return false;
+            if ($('input[name="date"]').val()=='') {$('input[name="date"]').css('border','solid red 2px');return false;}
+                else {$('input[name="date"]').css('border','');}
+            if ($('input[name="title"]').val()=='') {$('input[name="title"]').css('border','solid red 2px');return false;}
+                else $('input[name="title"]').css('border','');
+            if ($('textarea[name="desc"]').val()=='') {$('textarea[name="desc"]').css('border','solid red 2px');return false;}
+                else $('textarea[name="desc"]').css('border','');
+        })
+
+
+$('#save').on('click',function(){
+    $("#form").ajaxSubmit({success: function(responseText){
+            // window.location.href = "/admin/#"+$('input[name="id"]').val();
+            console.log($('#change'));
+            $('#change').html(responseText);
+    }
+
+})
+    })
+
+    $(document).on('click','button',console.log('hghfg'))
+$('#b').on('click',function(){console.log('b');$("textarea").wrapSelected("<b>", "</b>");return false;})
+$("#i").on('click',function(){$("textarea").wrapSelected("<i>", "</i>");return false;})
+$("#l").on('click',function(){
+    var y=prompt('Введите URL','http://');
+    if (y.substr(8,1))
+{
+    $("textarea").wrapSelected('<a href="'+y+'">', '</a>');
+    console.log('<a href="'+y+'">');
+    return false;
+}
+})
+function insert_text_cursor(_obj_name, _text)
+// _obj_name - name объекта - как правило, textarea, но при желании можно сделать любой
+// указываем именно NAME, так как согласно стандартам DOCTYPE HTML 4.01 strict и выше
+// свойство ID у объектов ввода является не приемлемым и требуется обращаться только name
+// _text - текст, который требуется вставить в том место, где сейчас находится курсор
+{
+// берем объект
+var area=document.getElementsByName(_obj_name).item(0);
+
+// Mozilla и другие НОРМАЛЬНЫЕ браузеры
+if ((area.selectionStart)||(area.selectionStart=='0'))
+{ // определяем, где начало выделения, если оно существует
+  var p_start=area.selectionStart;
+
+  // определяем, где заканчивается выдедение, если оно существует
+  var p_end=area.selectionEnd;
+
+  // вставляем соответствующий текст в указанное место
+  area.value=area.value.substring(0,p_start)+_text+area.value.substring(p_end,area.value.length);
+}
+
+// Исправляем очередной геморрой с Internet Explorer
+// единственный НЕ человеческий браузер
+if (document.selection)// если объект может иметь выделения
+{ // передаем фокус ввода на нужный нам объект
+  area.focus();
+
+  // узнаем выделение, если оно существует
+  sel=document.selection.createRange();
+
+  // вставляет текст в указанное место
+  sel.text=_text;
+}
+}// end function
+// $("#l").live('click',function(){
+// var y=prompt('Введите URL','http://');
+// if (y.substr(8,1))
+// {
+//    y2=y.substr(7);
+//     insert_text_cursor('desc', ' <a target="_blank" href="'+y+'">'+y2+'</a> ');
+// }
+
+return false;
+})
+
+        
+</script>
+
+<script language="JavaScript">
+document.onkeydown = checkKeycode
+function checkKeycode(e) {
+var keycode;
+if (window.event) keycode = window.event.keyCode;
+else if (e) keycode = e.which;
+if (keycode==116) {return false}
+}
+</script>
+
+<!-- Удаление -->
+
+<?php
+if ($action == 'del' AND $id)
+{
+    $img=mysql_fetch_array(mysql_query("select img from event where id={$id}"));
+    @unlink($root.'/img/event/'.$img['img']);
+    mysql_query("delete from event where id={$id}");
+    echo '<div class="down">';
+    echo '<span class="green">Событие удалено.</span>';
+    echo '</div>';
+}
+?>
+
+
+
+
+
+<!-- Удаление картинки-->
+
+<?php
+if ($action == 'delimg' AND $id)
+{
+    $img=mysql_fetch_array(mysql_query("select img from event where id={$id}"));
+    @unlink($root.'/img/event/'.$img['img']);
+    mysql_query("update event set img='' where id={$id}");
+    echo '<div class="down">';
+    echo '<span class="green">Картинка удалена.</span>';
+    echo '</div>';
+}
+?>
+
+
+
+
+
+
+
+
+
+<!-- Добавление -->
+
+<?php
+if ($action == 'add')
+{
+    echo '<form method="POST" action="views/admin/ajax/events/eventSave.php" enctype="multipart/form-data" name="edit" id="form"><div class="down"><b>Добавление</b><br /><br />';
+        echo 'Дата: <input id="date" style="width:700px;float:right;margin-right:30px" name="date" type="text" value="'.date('Y-m-d').'"/><br /><br />';
+        echo 'Введите заголовок: <input style="width:700px;float:right;margin-right:30px" type="text" name="title" value=""/><br /><br />';
+        echo 'Описание: <textarea name="desc" style="width:700px;float:right;margin-right:30px;height:400px"></textarea><br /><br />';
+        
+                echo '  <button type="button" id="i" title="Курсив" onclick="return false"><i style="font-family: times new roman;">I</i></button>
+                <button type="button" id="b" title="Жирный"><b>B</b></button> 
+                <button type="button" id="l" title="Cсылка">URL</button>';
+        
+        echo '<div style="clear:both"></div>';
+        echo 'Фото: <input  type="file" accept="image/jpeg" name="img" style="width:700px;float:right;margin-right:30px"><br /><br />';
+        echo '<div style="clear:both"></div>';
+        echo '<input type="button" id="save" name="save" value="Сохранить" />';
+    echo'</div></form>';
+}
+?>
+
+
+
+
+
+
+
+
+
+
+<!-- Редактирование -->
+
+<?php
+if ($action == 'edit' AND $id)
+{
+    echo '<style>.td-'.$id.'{background:silver;color:red;} .td-'.$id.' a{color:red}</style>';
+    $edit=mysql_fetch_array(mysql_query("select * from event where id={$id}"));
+    echo '<form method="POST" action="views/admin/ajax/events/eventSave.php" enctype="multipart/form-data" name="edit" id="form"><div class="down"><b>Редактирование</b><br /><br />';
+        echo 'Дата: <input id="date" style="width:700px;float:right;margin-right:30px" name="date" type="text" value="'.$edit['date'].'"/><br /><br />';
+        echo 'Введите заголовок: <input style="width:700px;float:right;margin-right:30px" type="text" name="title" value="'.$edit['title'].'"/><br /><br />';
+        echo 'Описание: <textarea name="desc" style="width:700px;float:right;margin-right:30px;height:400px">'.$edit['desc'].'</textarea><br /><br />';
+        
+        echo '  <button type="button" id="i" title="Курсив" onclick="return false"><i style="font-family: times new roman;">I</i></button>
+                <button type="button" id="b" title="Жирный"><b>B</b></button> 
+                <button type="button" id="l" title="Cсылка">URL</button>';
+        
+        echo '<div style="clear:both"></div>';
+        echo 'Фото: <input  type="file" accept="image/jpeg" name="img" style="width:700px;float:right;margin-right:30px"><br /><br />';
+        echo '<div style="clear:both"></div>';
+        echo '<input type="hidden" name="id" value="'.$id.'"><br /><br />';
+        echo '<input type="button" id="save" name="save" value="Сохранить" />';
+    echo'</div></form>';
+}
+?>
+
+
+
+
+</div>
+<div class="down" style="margin:20px auto">
+<a type="button" href="admin/event/add">Добавить событие</a>
+</div>
+<table>
+    <thead>
+        <tr>
+            <td>№</td>
+            <td>Дата</td>
+            <td>Заголовок</td>
+            <td>Описание</td>
+            <td>Картинка</td>
+            <td>Изменить</td>
+            <td>Удалить</td>
+        </tr>
+    </thead>
+    <?php
+    $q=mysql_query("select * from event order by date desc");
+    while ($e=mysql_fetch_array($q))
+    {
+    echo '<tr>';
+        echo '<td class="td-'.$e['id'].'">'.(++$n).'</td>';
+        echo '<td class="td-'.$e['id'].'">'.datefromsql($e['date']).'</td>';
+        echo '<td class="td-'.$e['id'].'">'.$e['title'].'</td>';
+        echo '<td class="td-'.$e['id'].'" style="text-align:center"><a class="preview" title="'.strip_tags($e['desc']).'"><img style="cursor:pointer" src="/img/map.png" /></a></td>';
+        echo '<td class="td-'.$e['id'].'" style="text-align:center">'; 
+            if ($e['img'])
+                echo '<a href="/img/event/'.$e['img'].'" class="preview" onclick="return false"><img src="/img/event/'.$e['img'].'" height="30px"/></a><a href="admin/event/delimg/'.$e['id'].'" style="position: absolute;margin: -7px 0 0 5px;" title="Удалить картинку"><span class="red" style="font-size:20px">&times;</span></a>';
+            else echo '<img src="/img/no-img.png" title="Нет фото" />';
+       //     $text=strip_tags($e['desc']);
+            
+            //$text=iconv("utf8", "windows-1251", $text);
+            
+       //     if (strlen($text)>180)  $text=substr($text, 0, strrpos(substr($text, 0, 180), ' ')).' ...' ; else $text=$text;
+       //     echo $text;
+       //     echo iconv("windows-1251", "utf8", $text); 
+        echo '</td>';
+        echo '<td class="td-'.$e['id'].'"><a href="admin/event/edit/'.$e['id'].'">Изменить</a></td>';
+        echo '<td class="td-'.$e['id'].'"><a href="admin/event/del/'.$e['id'].'">Удалить</a></td>';
+    echo '</tr>';
+    }
+    ?>
+</table>
+
+
+</div></td></tr>
+

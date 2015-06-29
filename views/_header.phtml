@@ -1,0 +1,84 @@
+<?php
+    $page -> addCss('css/style.css');
+    $page->setFavicon("img/favicon.ico");
+    $page -> addScript('js/jquery-1.8.2.js', 'js/navigation.js');
+	// $param=$controller->getURI();
+	// if(!empty($param[0]))
+	// {
+		$class_logo="class='logo'";
+		$logo_font_color="color:#000";//#a4a4a4;
+		$phone_main="class='phones'";
+		$grey_phone="style='font: 14px Arial, sans-serif;color: #A4A4A4 !important;top: -1px;margin-right:7px;'";
+		
+	// }
+	// else
+	// {
+	// 	$class_logo="class='logo'";
+	// 	$logo_font_color="color:#fff;text-decpration:none";
+	// 	$phone_main="class='phones'";//_main
+	// 	$grey_phone="style='font-size:14px;color:#d5d5d5 !important;top: -3px;margin-right:7px;'";
+	// }
+	print "<div id='main_back' style=''></div>";
+    echo "<div id='wrapper'>";
+	echo "  <div id='header'>
+                <div class='one'></div>
+                <div class='two'></div>
+                <div class='three'></div>
+                <div style='margin-top:10px;'><a ".$class_logo." style='text-decoration:none' href='/'><div style='padding-top:5px;margin:0 0 0 100px;font-family:Tahoma;font-size:19px;".$logo_font_color."'>GENERAL<br />EMPLOYMENT<br />AND&nbsp;ASSOCIATION</div></a></div>
+                <div class='rightBlock'>
+                    <div class='buttonPart'>
+                        <a href='http://info.gealtd.org'><span>Войти</span></a>
+                    </div>
+                    <div ".$phone_main.">
+                        <div class='content' style='color:#000'>";
+                            //<!--+38 063 376 32 48
+                            //+38 050 680 90 72-->
+							//<!--<span $grey_phone>+79</span>671201265-->
+                            echo " biznes@gealtd.org
+                            doktor@gealtd.org
+                        </div>
+                    </div>
+                </div>";
+				if(!empty($param[0]))
+				{
+					//print  "<div style='background:transparent url(../img/line_after_header.png) repeat-x;height:5px;margin:20px 20px 0 20px;'></div>";
+				}
+                
+          print "</div>";
+         
+    $page->addScript("jquery.corner.min.js");
+    if($controller->getController() == 'index'){echo getMenu_main();}else{echo getMenu();}
+?>
+<script>
+  // $(document).ready(function(){
+  //      $('#main').css('min-height',$('#menu').height());
+  // })
+</script>
+
+
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+(function (d, w, c) {
+    (w[c] = w[c] || []).push(function() {
+        try {
+            w.yaCounter2031049 = new Ya.Metrika({id:2031049,
+                    webvisor:true,
+                    clickmap:true,
+                    trackLinks:true});
+        } catch(e) { }
+    });
+
+    var n = d.getElementsByTagName("script")[0],
+        s = d.createElement("script"),
+        f = function () { n.parentNode.insertBefore(s, n); };
+    s.type = "text/javascript";
+    s.async = true;
+    s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js";
+
+    if (w.opera == "[object Opera]") {
+        d.addEventListener("DOMContentLoaded", f, false);
+    } else { f(); }
+})(document, window, "yandex_metrika_callbacks");
+</script>
+<noscript><div><img src="//mc.yandex.ru/watch/2031049" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->

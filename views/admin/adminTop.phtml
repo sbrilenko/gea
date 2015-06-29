@@ -1,0 +1,109 @@
+<tr>
+<td class='head'>
+<?php
+    $tut = 'top';
+    include "menu.php"; 
+    $db = db :: getInstance();   
+    $form = new ad();
+	$db -> query('SELECT prod_id FROM top_prods');
+	$top = $db -> getArray();
+?>
+</td>
+</tr>
+<script type="text/javascript">
+$(document).ready(function(){
+
+
+	$('select').on('change', function(){
+		var a = $(this).find('option:selected').val();				
+		$('select').not(this).children('option[value="'+a+'"]').hide();
+		$(this).siblings('input[type="hidden"]').val(a);
+
+	});
+
+	$('#save').on('click', function(){
+		var send = true;
+		$('select').each(function(){
+			if($(this).val() == 0){ 
+				$(this).css('border', '1px solid red'); send = false;
+				
+			}else{
+				$(this).css('border', '');
+			}
+
+		});
+				if (send){
+		var toPost = '';
+		for(var i=1;i<11;i++){
+			toPost += i+'='+$('#'+i).val()+'&';
+		}
+		toPost += '11='+$('#11').val();
+		$.post('views/admin/ajax/products/saveTop.php', toPost, function(responseText){console.log(responseText);});		
+	}else{
+		alert('Заполните все поля для продолжения');
+	}
+		
+	});
+
+
+})
+
+</script>
+<?php
+function select($i){
+	global $db;
+	global $top;
+	$select = "<select name='razd' id='razd'><option value='0'>Выберите товар</option>";				    
+				    $db -> query('SELECT * FROM  prod WHERE showCat=1');				    
+				    $prods = $db -> getArray();			    
+				    foreach($prods as $prod){		
+				    if ($prod['id'] == $top[$i]['prod_id']){				    		
+				    		$select .="<option selected = 'selected' value='".$prod['id']."'>".$prod['name']."</option>";			   	
+				    		}else{
+				    			$select .="<option value='".$prod['id']."'>".$prod['name']."</option>";				
+				    		}					
+					}
+				$select .="</select><br/>";				
+	
+	return $select;
+}
+?>
+<tr><td><div id="content">
+<table id="top_table" align="center">
+	<tr>
+		<td colspan="2" rowspan="2" align=center>
+			<?php echo select(0);?>
+			<input type="hidden" id="1" value=<?php echo $top[0]['prod_id'];?>>
+		</td>
+		<td align=center><?php echo select(1);?><input type="hidden" id="2" value=<?php echo $top[1]['prod_id'];?>></td>
+		<td align=center><?php echo select(2);?><input type="hidden" id="3" value=<?php echo $top[2]['prod_id'];?>></td>
+	</tr>
+	<tr>
+		<td colspan="2" rowspan="2" align=center>
+			<?php echo select(3);?>
+			<input type="hidden" id="4" value=<?php echo $top[3]['prod_id'];?>>
+		</td>
+	</tr>
+	<tr>
+		<td align=center><?php echo select(4);?><input type="hidden" id="5" value=<?php echo $top[4]['prod_id'];?>></td>
+		<td align=center><?php echo select(5);?><input type="hidden" id="6" value=<?php echo $top[5]['prod_id'];?>></td>
+	</tr>
+	<tr>
+		<td colspan="2" rowspan="2" align=center>
+			<?php echo select(6);?>
+			<input type="hidden" id="7" value=<?php echo $top[6]['prod_id'];?>>
+		</td>
+		<td align=center><?php echo select(7);?><input type="hidden" id="8" value=<?php echo $top[7]['prod_id'];?>></td>
+		<td align=center><?php echo select(8);?><input type="hidden" id="9" value=<?php echo $top[8]['prod_id'];?>></td>
+	</tr>
+	<tr>
+		<td align=center><?php echo select(9);?><input type="hidden" id="10" value=<?php echo $top[9]['prod_id'];?>></td>
+		<td  align=center><?php echo select(10);?><input type="hidden" id="11" value=<?php echo $top[10]['prod_id'];?>></td>
+	</tr>
+	<tr><td colspan="4" align=center><button type='button' id='save'>Запомнить</button></td></tr>
+</table>
+	
+</div></td></tr>
+<?php
+
+?>

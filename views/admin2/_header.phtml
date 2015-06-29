@@ -1,0 +1,58 @@
+<?php
+
+//print_r($_SESSION);
+iconv_set_encoding("internal_encoding", "UTF-8");
+iconv_set_encoding("output_encoding", "utf-8");
+//header("Content-type: text/html; charset=utf-8");?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+    <title>Gea Group</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js"></script>
+    <script type="text/javascript" src="http://gea.net.ua/editor/js/form.js"></script>
+    <link rel="stylesheet" type="text/css" href="/editor/css/reset.css" />
+    <script type="text/javascript" src="/js/jquery-ui-1.8.17.custom.min.js"></script>
+    <script type="text/javascript" src="/js/tolltip.js"></script>
+    <link rel="stylesheet" type="text/css" href="/editor/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="/editor/css/ui/jquery-ui-1.8.17.custom.css" />
+<script>
+ 
+       	$(function() {
+		$( "#date" ).datepicker();
+	});
+    	$(function() {
+		$.datepicker.regional['ru'] = {
+		closeText: 'Закрыть',
+		prevText: 'Пред',
+		nextText: 'След',
+		currentText: 'Сегодня',
+		monthNames: ['Январь','Февраль','Март','Апрель','Май','Июнь',
+		'Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'],
+		monthNamesShort: ['Янв','Фев','Мар','Апр','Май','Июн',
+		'Июл','Авг','Сен','Окт','Ноя','Дек'],
+		dayNames: ['воскресенье','понедельник','вторник','среда','четверг','пятница','суббота'],
+		dayNamesShort: ['вск','пнд','втр','срд','чтв','птн','сбт'],
+		dayNamesMin: ['Вс','Пн','Вт','Ср','Чт','Пт','Сб'],
+		weekHeader: 'Не',
+		dateFormat: 'yy-mm-dd',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	   $.datepicker.setDefaults($.datepicker.regional['ru']);
+		$( "#age" ).datepicker();
+	});
+    </script>
+</head>
+<body>
+<div id="content">
+<div class="content">
+<?php
+require_once '../scripts/config.php';
+require_once 'dll.php';
+?>

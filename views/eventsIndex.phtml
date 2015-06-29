@@ -1,0 +1,101 @@
+<?php session_start()?>
+<?php
+    $page -> addScript("js/jquery.cookie.min.js", "js/events.js");
+    $page -> description = "ГЕА новости,  ГЕА акции, GEA новости,  GEA акции, GEA видео, GEA презентация, ГЕА видео, ГЕА презентация, Сетевая компания, Сетевой маркетинг МЛМ, GEA International Group, Гнетнева  Елена Алексеевна, Маркетинг план, Сетевой маркетинг план, Вознаграждения, Бонусы, Контракты.";
+    $page -> title = "GEA | События";
+   // echo "<div class='productCaption'>События</div>"; 
+   // echo "<div id='for-galery'></div>";
+  //  echo getEvents();
+?>
+<!--<div class="textHeader">1-2 июля. г. Москва. Событие международной компании «GEA Group»</div>
+
+<p>Май и Июнь - это зеркало Ваших результатов! И лучшее, что вы сможете сделать, это удвоить свои доходы, увеличить их на порядок! Для этого нужно закладывать результат сейчас! Не нужно ждать! После события ваш бизнес приобретет более совершенную форму, это будет другая скорость, темп, поэтому если с вами будет один человек на событии -  это хорошо, но  если пять - это совершенно другое дело!</p>
+<p>И второе, не забывайте, лучший инструмент для роста вашего бизнеса – это промоушен!</p>
+<p>Активизируйте ваши сети и погружайтесь с головой в промоушен  на Испанию!</p>
+
+<p><b>Условие промоушена на путевку в Испанию (Канарские острова)</b></p>
+<p>Партнёры, закрывшие накопительно 70 стэпов с момента старта проекта до 16 июня, получают возможность поехать в турпоездку (Канарские острова), оплачиваемую Компанией (вместо 200 накопительно закрытых стэпов).</p>
+
+<p><b>Внимание! Дополнительный супер промоушен  к корпоративному  событию,  от руководства компании:</b></p>
+
+<p>1. Netbook в подарок получит каждый партнер, подписавший десять ЛП (лично приглашённых) в статусе Бизнес-Партнёр (300 баллов) за два отчетных периода с 10 по 19 мая.</p>
+
+<p>2. За первое и второе места в номинации «Наибольшее количество ЛП» (в статусе Бизнес-партнер) за отчетный период с 10 мая по 16 июня победители награждаются путевкой на Канарские острова. Это путешествие – вместе с командой лидеров и руководством компании.</p>
+--> 
+<?php
+
+if (stristr($_SERVER['REQUEST_URI'],'events'))
+{
+        $threemonthsago=date("Y-m-d",mktime(0,0,0,date('m')-3,date('d'),date('y')));
+
+        $q=mysql_query("select * from event where `date`>'".$threemonthsago."' order by date desc");
+        echo '<div class="productCaption">События и акции</div>';
+        echo '<div class="e-archive"><a href="/events/all">Архив событий</a></div>';
+
+    
+    echo '<div style="clear:both"></div>';
+    while($event=mysql_fetch_array($q))
+    {
+    $imginfo=@getimagesize("img/event/".$event['img']);
+       
+        $dott=0;
+        if (mb_strlen($event['desc'])>300)  
+        {
+            $text=substr($event['desc'], 0, strrpos(substr($event['desc'], 0, 380), ' ')).' ...';
+            $dott=1;
+        } 
+        else $text=$event['desc'];
+        echo '<div style="clear:both"></div>';
+        echo '<div class="ee-date">';
+            echo getfulldaterus($event['date']);
+        echo '</div>';
+        echo '<div class="e-title" id="t_'.$event['id'].'">';
+            echo (!$dott and !$event['img'])?'<span class="open">'.$event['title'].'</span>':'<a id="a_'.$event['id'].'" class="e-title-a">'.$event['title'].'</a>';
+            
+        echo '</div>';
+        
+        echo'<div class="show" id="s_'.$event['id'].'">';
+            echo '<p>'.$text.'</p>';
+        echo'</div>';
+        
+        echo' <div class="hidden" id="h_'.$event['id'].'">';
+            if ($event['img'])
+            {
+               // $imginfo=getimagesize('./img/event/'.$event['img']);
+                echo '<img class="e-img" src="img/event/'.$event['img'].'"'; if ($imginfo[0]<600) echo'align="left"';  echo'/>';
+            }
+            $text_full ='<p>'.str_replace("\r\n\r\n", '</p><p>', $event['desc']).'</p>';
+            $text_full =str_replace("\r\n", '<br />', $text_full);
+            echo $text_full;
+        echo'<div class="clear"></div></div>';  
+    }   
+}
+echo '<div style="clear:both"></div>';
+
+
+function getfulldaterus($date)
+{
+    $days=array('01', '02', '03', '04', '05', '06', '07', '08', '09');
+    $ymd=explode('-', $date);
+    switch ($ymd[1])
+        {
+            case '01': $month=' января ';   break;
+            case '02': $month=' февраля ';  break;
+            case '03': $month=' марта ';    break;
+            case '04': $month=' апреля ';   break;   
+            case '05': $month=' мая ';      break;
+            case '06': $month=' июня ';     break;
+            case '07': $month=' июля ';     break;
+            case '08': $month=' августа ';  break;
+            case '09': $month=' сентября '; break;
+            case '10': $month=' октября ';  break;
+            case '11': $month=' ноября ';   break;
+            case '12': $month=' декабря ';  break;
+            default: $month='Error!';       break;       
+        }
+        if (in_array($ymd[2],$days)) $ymd[2]=$ymd[2][1];
+        ($month!='Error!') ? $date=$ymd[2].$month.$ymd[0].' г.' : $date='';
+        return $date;
+}
+
+?>

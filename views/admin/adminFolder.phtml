@@ -1,0 +1,110 @@
+
+<script>
+    $(document).ready(function(){
+        $('.del').on('click', function(){
+            $.post("views/admin/ajax/galery/delPhoto.php", {id:$(this).attr('id'), f_id : $('#f_id').val()}, function(answer){console.log(answer)});
+        })
+
+
+        $("#gal_id [value='"+$('#l_gal_id').val()+"']").attr("selected", "selected");
+
+        $('#loadPhoto').live('click',function ()
+        {
+                var photoLoader =
+                {
+                    url:   'views/admin/ajax/galery/photo.php',
+                    beforeSubmit: function(jqForm)
+                    {
+                        $('#loadPhoto').hide();
+                        $('#img_loader_photo_preview').replaceWith("<span id='img_loader_photo_preview'><img style='margin: 0px 8px 5px;' src='/img/admin/l.gif'/> Подождите идет загрузка фото</div>");
+                    },
+                    success: function(responseText)
+                    {
+                        $('#loadPhoto').show();
+                        $('#img_loader_photo_preview').replaceWith("<span id='img_loader_photo_preview'></span>");
+                        $('#loaded_image_preview').replaceWith('<span id="loaded_image_preview">'+responseText+'</span>');
+                        window.location.href = 'admin/folder/edit/'+$('#f_id').val();
+                    }
+                };
+                $('#form').ajaxSubmit(photoLoader);
+            })
+    })
+</script>
+<tr>
+    <td class='head'>
+        <?php
+        $tut = 'galery';
+        include "menu.php";
+        $db = db :: getInstance();
+        $form = new ad();
+        $root=$_SERVER['DOCUMENT_ROOT'];
+        $action = $controller -> getParam(1);
+        $id = (int)$controller -> getParam(2);
+
+        $db->query("SELECT * FROM galery_folders WHERE id = {$id}");
+        $folder = $db->getRow();
+        if($action == 'edit' and $id) {$name = $folder['name']; $last_id = $id;
+        }else{
+            $db->query("SELECT id FROM galery_folders");
+            $last_id = $db->getArray();
+            $last_id = end($last_id);
+            $last_id = $last_id['id'];
+            $last_id++;
+        }
+
+        ?>
+        <?php if($action == 'edit' and $id){
+        $files = scandir('img/g/1000/'.$id.'/');}?>
+    </td>
+</tr>
+<tr>
+    <td>
+        <div id="content">
+            <input type="hidden" value="<?php echo $last_id?>" id="f_id">
+            <form id="form" method="post" enctype="multipart/form-data" action="views/admin/ajax/galery/folderSave.php">
+                <input  type="hidden" name="id" value="<?php echo $id?>">
+                <input  type="hidden" name="last_id" value="<?php echo $last_id?>">
+                <input  type="hidden" name="count" value="<?php echo count($files);?>">
+            <table>
+                <tr>
+                    <td>Мероприятие:</td><td colspan="2">
+                        <?php  $db->query("SELECT * FROM menu WHERE parentId = 32");
+                            $gal_ids = $db->getArray();
+                        ?>
+                        <select id="gal_id" name="gal_id">
+                            <?php foreach($gal_ids as $gal_id){?>
+                            <option value="<?php echo $gal_id['id']?>"><?php echo $gal_id['caption']?></option>
+                            <?php }?>
+                        </select>
+                        <input type="hidden" value="<?php echo $folder['gal_id']?>" id="l_gal_id">
+                    </td>
+                </tr>
+                <tr>
+                    <td>Название папки:</td><td colspan="2"><input type="text" name="name" size="100" value="<?php echo $name;?>"> </td>
+                </tr>
+                <?php if(($action ='edit') and $id){?>
+                <tr>
+                    <td>Фотографии:<br><span class="help">Загружать не более 20 фото за раз!<br>Фото обязательно свыше 666px <br> и желательно не более 1000px<br>по ширине</span></span></td>
+                    <td colspan="2"><input type="file" name="photos[]" id="photo" multiple><input type="button" value="Загрузить" id="loadPhoto">
+                        <span id="img_loader_photo_preview"></span></td>
+
+                </tr>
+                <?php }?>
+                <tr>
+                    <td colspan="3" align="center"><input type="submit" id="save" value="Сохранить"></td>
+                </tr>
+            </table>
+            </form>
+
+            <table>
+                <?php
+                    for($i=1; $i<count($files);$i++){
+                        if(($files[$i]!='.') and ($files[$i]!='..') and ($files[$i]!='Thumbs.db')){
+                   if($i%4 == 1) echo '<tr>';
+                        echo '<td><img src="/img/g/1000/'.$id.'/'.$files[$i].'" width="200px"><a id="'.$files[$i].'" class="del">X</a></td>';
+                   if($i%4 == 0) echo '</tr>';
+
+                    }
+                    }  ?>
+            </table>
+</div></td></tr>

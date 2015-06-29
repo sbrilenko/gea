@@ -1,0 +1,166 @@
+<script type="text/javascript" src="/js/scrollTo.js"></script>
+<script>
+$(document).ready(function(){
+    var id=0;
+    $('.show').live('click',function(){
+        id=$(this).attr('id').split('_')[1];
+        if ($('#d_'+id).css('display')=='none')
+        {
+            console.log('show');
+            $('#d_'+id).slideDown('normal',function(){$.scrollTo('#t_'+id, 1000);});
+            $(this).find('div').css('background-position','-18px 0px');
+            $('.show#t_'+id).css('color','#DC0000');
+        }
+        else
+        {
+            console.log('hide');
+            $('#d_'+id).slideUp('normal',function(){$.scrollTo('.show:first', 1000);});
+            $(this).find('div').css('background-position','0px 0px');
+            $('.show#t_'+id).css('color','#000');
+        }
+        })
+        
+        $('.show').live('mouseover',function(){id=$(this).attr('id').split('_')[1];if ($('#d_'+id).css('display')=='none')$(this).css('color','#DC0000');})
+        $('.show').live('mouseout',function(){id=$(this).attr('id').split('_')[1];if ($('#d_'+id).css('display')=='none')$(this).css('color','#000');})
+        
+        
+        $('.good').each(function(){
+            //console.log($(this).find('.height').height());
+            if ($(this).find('.height').height()>25)
+            {
+                h=$(this).find('.height').height();
+                dataClass=$(this).find('.height').attr('data-class');//alert(dataClass);
+                $('span[data-class="'+dataClass+'"]').height(h);
+                //num=$(this).attr('id').split('_')[1];
+                //alert(num);
+                //if (num%2!=0) $(this).next().find('.height').height(h);
+                //else $(this).prev().find('.height').height(h);
+                //$(this).parent().parent().findNext('.height').height(h);
+            } 
+        })
+})
+
+</script>
+<?php
+if($controller->hasParam('filter')){
+	if($controller->hasParam('full') or $controller->hasParam('doc')){
+
+		if($controller->hasParam('full')){
+					$id=$controller->getParam('full');
+//				    $good=mysql_fetch_array(mysql_query("select * from gea.prod where showProd=1 and id=".$id)); was
+                    $good=mysql_fetch_array(mysql_query("select * from prod where showProd=1 and id=".$id)); //changed
+				    if (!$good['id']) {header('Location: /404');}
+				    $idcat = $controller->getParam('filter');
+//				    $cat=mysql_fetch_array(mysql_query("select * from gea.menu where id=".$idcat)); was
+                    $cat=mysql_fetch_array(mysql_query("select * from menu where id=".$idcat));//changed
+				    echo '<div class="nav"><a href="/products/">Продукция</a>';if ($cat['link']) echo' / <a href="products/category/filter/'.$cat['id'].'">'.$cat['caption'].'</a>';echo'</div>';
+				    echo '<div class="productCaption">'.$good['name'].'</div>';if ($_SESSION['authorized']==='ok') echo '<a target="_blank" href="http://gea.net.ua/editor/prod.php?editid='.$good['id'].'" style="color:red;position: absolute;">Edit</a>';
+				    echo '<img style="';if ($good['price']) echo 'margin:0 20px 60px 0'; else echo 'margin:0 20px 20px 0'; echo'" src="'; $tmp = explode('_',$good['img']); echo ($tmp[1] =='site.jpg') ? 'catalog/img/prod/'.$good['img'] : 'img/prod/'.$good['img']; echo '" align="left" width="322px" >';
+				    if ($good['price']!='') 
+				    {
+				        $highlight = preg_replace('/[0-9]/i', '<span class="highlight">\\0</span>', $good['price']);
+				        $highlight = preg_replace('/ББ/i', '<span class="BB">\\0</span>', $highlight);
+				        $highlight = preg_replace('/(Нет в наличии)/i', '<span class="no-be">\\0</span>', $highlight);
+				        $highlight = preg_replace('/(Нет в продаже)/i', '<span class="no-be">\\0</span>', $highlight);
+				        $highlight = preg_replace('/(Нет на складе)/i', '<span class="no-be">\\0</span>', $highlight);
+				        echo '<div class="prices">'.$highlight.'</div>';
+				    }
+
+				    $text ='<p>'.str_replace("\r\n\r\n", '</p><p>', $good['desc']).'</p>';
+				    $text =str_replace("\r\n", '<br />', $text);
+					
+					$text ='<p>'.str_replace("\n\n", '</p><p>', $text).'</p>';
+				    $text =str_replace("\n", '<br />', $text);
+						
+				    echo $text;
+				    echo '<div style="clear:both"></div><br />';
+//				    $q=mysql_query("select * from gea.prod_des where id_prod=".$good['id']." order by title ASC"); was
+                    $q=mysql_query("select * from prod_des where id_prod=".$good['id']." order by title ASC"); //changed
+				    while($des=@mysql_fetch_array($q))
+				    {
+				        $descr = preg_replace('/\n{3,}/','', $des['text']);
+				        $descr =str_replace("\n", '<br />',  $descr);        
+				        $descr ='<p>'.str_replace("<br /><br />", '</p><p>',$descr).'</p>';
+				        $descr ='<p>'.str_replace("\n\n", '</p><p>', $descr).'</p>';
+						// $descr =str_replace("\n", '<br />', $descr);
+				        
+						
+				        echo '<div class="textHeader show" id="t_'.$des['id'].'" style="margin: 10px 0 0 0;"><div class="pl-mi"></div>'.$des['title'].'</div>';
+				        echo '<div class="redBlockOuter" id="d_'.$des['id'].'" style="margin:30px 0 50px;padding:30px 20px 14px 30px; border-radius: 25px;display:none">'.$descr.'</div>';
+				    }
+				    echo '<br />';
+		}
+
+		if($controller->hasParam('doc')){
+						$idcat = $controller->getParam('filter');
+//						$cat=mysql_fetch_array(mysql_query("select * from gea.menu where id=".$idcat)); was
+                        $cat=mysql_fetch_array(mysql_query("select * from menu where id=".$idcat)); //changed
+					    echo '<div class="nav"><a href="/products/">Продукция</a> ';if ($cat['link']) echo' / <a href="/products/category/filter/'.$cat['id'].'">'.$cat['caption'].'</a>';echo'</div>';
+					    $id=$controller->getParam('doc');    
+//					    $docs=mysql_fetch_row(mysql_query("select `doc` from gea.prod where id=".$id)); was
+                        $docs=mysql_fetch_row(mysql_query("select `doc` from prod where id=".$id)); //chanhed
+					    if (!$docs[0]) {header('Location: /404');}
+					    $docs=explode(' ',$docs[0]);
+					    echo '<div style="margin:10px 0 0 0;height:25px"><a class="cert-back" href="#" style="border-radius: 6px;"><span>Вернуться к назад</span></a></div>';
+					    foreach($docs as $iddoc)
+					    {
+//					    $doc=mysql_fetch_array(mysql_query("select * from gea.certificates where id=".$iddoc)); was
+                        $doc=mysql_fetch_array(mysql_query("select * from certificates where id=".$iddoc)); //changed
+					    echo '
+					    <div class="cert-container">
+											<div class="cert-photo-wrapper">
+												<img src="img/certificates/thumb_'.$doc['picture'].'" alt="certificate">
+											</div>
+											<div class="cert-info-container">
+												<div class="cert-title">'.$doc['title'].'</div>
+												<div class="cert-info">'.$doc['description'].'</div>
+												<a class="cert-more" href="img/certificates/'.$doc['picture'].'" target="_blank" style="border-top-left-radius: 6px; border-top-right-radius: 6px; border-bottom-left-radius: 6px; border-bottom-right-radius: 6px; "><span>Подробнее</span></a>
+											</div>
+										</div>
+					    ';
+					    }
+		}
+
+	}else
+	{
+		
+		$idcat = $controller->getParam('filter');		
+		$q = mysql_query("SELECT * FROM  `menu` WHERE id=".$idcat);		
+		$tit=mysql_fetch_row($q);
+		?>
+		<div class="nav"><a href="/products/">Продукция</a></div>
+		<div class="productCaption"><?php echo $tit['caption']?></div>
+
+		<?php
+		$q=mysql_query("select * from prod where showProd=1 and id_razd=".$idcat);
+		while($good=mysql_fetch_array($q))
+		{
+		    $i++;
+		   // print_r($good);if ($_SESSION['authorized']==='ok') echo '&nbsp;&nbsp;&nbsp;<a target="_blank" href="http://gea.net.ua/editor/prod.php?editid='.$good['id'].'" style="color:red">Edit</a>';
+		    echo '
+		    <div class="good" id="num_'.$i.'" ';if(!$good['doc']) echo 'style="text-align:left"';echo'>
+		        <a  class="productCaption productCaptionCatalogue"  href="products/category/filter/'.$idcat.'/full/'.$good['id'].'"><span data-class="'.$j.'" class="height">'.$good['name'].'</span>';echo'
+		        <span style="display:block;width:322px; height:348px;margin: 20px auto 0;"><img style="float: left;margin-bottom:20px" src="'; $tmp = explode('_',$good['img']); echo ($tmp[1] =='site.jpg') ? 'catalog/img/prod/'.$good['img'] : 'img/prod/'.$good['img']; echo '" alt="'.$good['name'].'" title="'.$good['name'].'" width="322px" /></span></a>';
+		        echo '<a class="links" ';if(!$good['doc']) echo 'style="margin-left:46px"';echo' href="products/category/filter/'.$idcat.'/full/'.$good['id'].'">&nbsp;&nbsp;Подробнее&nbsp;&nbsp;&nbsp;</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+		        if ($good['doc']){echo '<a class="links" href="products/category/filter/'.$idcat.'/doc/'.$good['id'].'">Документация&nbsp;</a>';}
+		        echo '</div>';   
+		    if (!($i%3))
+		    {
+		        echo '<span class="remove_for_two" style="display:none;"><div style="clear: both;"></div><div class="bolshoy-plus"></div><div class="bolshoy-plus2"></div><div style="clear: both;"></div></span>';
+		        $j++;
+		    }
+		    if (!($i%2)) echo '<span class="add_for_two" style="display:none"><div style="clear: both;"></div><div class="bolshoy-plus"></div><div style="clear: both;"></div></span>';
+		}
+		$num=mysql_num_rows(mysql_query("select * from prod where id_razd=".$idcat));
+		if (!($num%2)) echo '<div style="width: 10px;height: 40px;margin:-50px auto 0 ;background: #fff;"></div>';
+	}
+	
+
+
+
+}else{
+	// echo $controller->getParam('filter');
+	require_once('views/404.phtml');
+}
+
+?>

@@ -1,0 +1,23 @@
+<?php
+    $page -> setKeywords("кремневит, шамбала, ковчег, вигатор, выведение радионуклидов, омоложение организма, очищение организма, шлаки в организме, шамбала купить, шамбала цена, очищение от шлаков, очистка организма, чистка организма, очищение от паразитов.");
+    $page -> setDescription("КРЕМНЕВИТ – продукт Земли, живительный магнетизм солнца, воды и воздуха. ВИТАГOР - классический противопаразитарный растительный комплекс. ШАМБАЛА - растительный противомикозный комплекс общеукрепляющего действия. КОВЧЕГ - растительный фитокомплекс.");
+
+		   
+			$page->setTitle("GEA | Полезные статьи");
+        echo "<div class='productCaption'>Полезные статьи</div>";
+          $sql="SELECT * FROM articles ORDER BY date ASC";
+         $sql2 = mysql_query($sql);
+		while($record = mysql_fetch_array($sql2))
+		{
+			print '<div class="clear"></div>';
+			print '<div class="productCaption productCaptionCatalogue">'.$record['name'].'</div><p>'.$record['description'].'...</p>';
+			print '<div class="priceBlock">
+  <a class="more" href="/articles/show/article/'.$record['id'].'"><span>Подробное описание</span> </a>
+  <div class="price" style="border-top-left-radius: 8px; border-top-right-radius: 8px; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px">
+  </div>
+  <div class="clear_height_20"></div>
+</div>';
+		}
+      
+
+?>

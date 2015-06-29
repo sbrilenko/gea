@@ -1,0 +1,71 @@
+<?php $root=$_SERVER['DOCUMENT_ROOT'];
+$action = $controller -> getParam(1);
+$id = (int)$controller -> getParam(2);
+$db->query("SELECT
+                m.caption,
+                m.id as mid,
+                gf.id as gfid,
+                gf.name
+                FROM menu AS m
+                LEFT JOIN galery_folders AS gf
+                ON gf.gal_id = m.id
+                WHERE m.parentId = 32");
+$galeries = $db->getArray();
+//print_r($galeries);
+?>
+<tr>
+    <td class='head'>
+        <?php
+        $tut = 'galery';
+        include "menu.php";
+        $db = db :: getInstance();
+        $form = new ad();
+        ?>
+    </td>
+</tr>
+<tr>
+    <td>
+        <div id="content">
+            <script>
+                $(document).ready(function(){
+                    $('#save').on('click',function(){
+                        $.post('views/admin/ajax/galery/galerySave.php', $('#form').serialize(), function(answer){
+                            console.log(answer);
+                            window.location.href = "admin/galery";
+                        })
+                    })
+
+
+                })
+            </script>
+            <?php if(($action == 'add') or (($action=='edit')and($id))){
+                if($action == 'edit'){
+                    $db->query("SELECT caption FROM menu WHERE id = {$id}");
+                    $caption = $db->getValue();}
+                echo '<div class="down"><form  id="form" method="post" action="views/admin/ajax/galerySave.php">
+                        <input type="hidden" name="id" value="'.$id.'">
+                        <input type="text" name="caption" size=100 value="'.$caption.'">
+                        <input type="button" name="save" id="save" value="Сохранить">
+                        </form></div>';
+
+            }?>
+            <a href="admin/galery/add">+ Добавить мероприятие</a>                              <a href="admin/folder/add">+ Добавить папку</a>
+            <table style="width:100%">
+                <?php
+                    $gal_name = '';
+                    foreach($galeries as $galery){
+                        if($galery['caption'] != $gal_name){
+                ?>
+                <tr>
+                    <td ><b><?php echo $galery['caption'];?></b></td>
+                    <td colspan="2"><a href="admin/galery/edit/<?php echo $galery['mid']?>">Редактировать</a></td>
+                </tr>
+                <?php  $gal_name = $galery['caption'];}?>
+                <tr id="<?php echo $galery['gfid'];?>">
+                    <td><?php echo $galery['name']?></td>
+                    <td><a href="admin/folder/edit/<?php echo $galery['gfid'];?>">Редактировать</a></td>
+                    <td><a href="admin/folder/del/<?php echo $galery['gfid'];?>" title="Удалить">X</a></td>
+                </tr>
+                <?php }?>
+            </table>
+</div></td></tr>

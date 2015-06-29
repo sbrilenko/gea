@@ -1,0 +1,78 @@
+<?php
+  $page->setTitle("Фото-отчеты - GEA Group");
+  $page -> keywords = "ФОТОГАЛЕРЕЯ геа Фото-отчеты GEA Group";
+  $page->addScript("js/jquery.lazyload.js", "js/gallery-move.js", "js/gallery.js");
+$event = $controller->getParam(1);
+
+?>
+<link id="fsize" rel="stylesheet" href="css/styles_1400.css" type="text/css" media="screen" />
+<!--[if IE]>
+<script src="/js/PIE.js" language="javascript"></script>
+<![endif]-->
+<div class="productCaption">
+    <?php
+//    echo $event;
+    $db->query("SELECT caption FROM menu WHERE id={$event}");
+    $photoRaport = $db->getValue();
+    echo $photoRaport;
+    ?>
+    </div>
+<div class="galery-new">
+    <div class="galery-new-btn-left"></div>
+    <div class="galery-new-btn-right"></div>
+    <div class="galery-new-main">
+        <?php
+        $db->query("SELECT * FROM galery_folders WHERE gal_id = {$event}");
+        $folders = $db->getArray();
+            ?>
+<!--            <script type="text/javascript">-->
+<!--            $(function(){-->
+<!--                var li = $('.selected').find('.submenu li:first');-->
+<!--                var text = li.text();-->
+<!--                li.addClass('selected').html('<span>'+text+'</span>');-->
+<!--                $('.productCaption').text(text);-->
+<!--            })-->
+<!--            </script>-->
+            <?php
+if(count($folders)<3){
+    $ic=2;
+}
+       foreach($folders as $folder){
+            echo '<div id="p'.$folder['id'].'" class="album No-'.++$ic;echo ($ic > 5) ?' hide':''; echo'">';
+                echo '<img src="/img/g/'.$folder['id'].'/ava.jpg" />';
+                echo '<div class="titleAlbom">'.$folder['name'].'</div>';
+            echo '</div>';
+        }
+        ?>
+    </div>
+</div>
+<div style="clear: both;" ></div>
+<div class="galery-new-prewiew"></div>
+
+<div class="galery display_none">
+    <div class="position_fixed galery_back"></div>
+    <div class="position_fixed z_index_9999 gall_position photo_gallery galery_floors_shadow back_and_padding_photo_gallery">		  
+        <div class="top_left_arrow gal_arrow_left position_absolute gal_arrow_height_">
+            <div class="gal_arrow "></div>
+        </div>
+        	
+        <div class="top_right_arrow gal_arrow_right position_absolute gal_arrow_height_">
+            <div class="gal_arrow gal_arrow_right_pos"></div>
+        </div>	
+        <div class="position_relative">
+            <div class="position_absolute">
+      		    <div id="count"></div>
+            </div>
+        </div>
+        <div class="float_right"><div class="close_photos_gal position_absolute" title="Закрыть (Esc)"></div></div>
+        <div class="position_relative overflow_hidden photo_gallery">
+            <div class="position_absolute preloader" id="preloader_gif"></div>
+            <div id="for-map"></div>
+        </div>
+        <div class="position_absolute gal_right_zero on_hover_no_cursor">
+            <div class="fsize_icon" title="«4size» технология (от англ. size – размер; в переводе - «четыре размера») позволяет создавать веб-сайт, которые качественно отображаются и удобно читаются на всех популярных разрешениях экранов монитора (поддерживается 4-х и 6-ти размерные варианты)."></div>
+        </div>
+    	<div class="position_relative"><div class="esc_gal">Навигация: стрелка влево, стрелка вправо, Esc</div></div>		     
+   </div>
+</div>
+<div style="clear: both;" ></div>

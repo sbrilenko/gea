@@ -1,0 +1,220 @@
+<?php
+$root=$_SERVER['DOCUMENT_ROOT'];
+$action = $controller -> getParam(1);
+$id = (int)$controller -> getParam(2);
+$db->query("SELECT * FROM prod");
+$goods = $db->getArray();
+$mySelect = '<optgroup><option value="0">---------------Удалить---------------</option></optgroup>';
+foreach($goods as $good){
+    $mySelect .='<option value='.$good['id'].'>'.$good['name'].'</option>';
+}
+?>
+<tr>
+    <td class='head'>
+        <?php
+        $tut = 'results';
+        include "menu.php";
+        $db = db :: getInstance();
+        $form = new ad();
+        ?>
+    </td>
+</tr>
+<tr>
+<td>
+<div id="content">
+<div id="change">
+<script>
+    $(document).ready(function(){
+        $('input[name="date"]').mask('99.99.9999');
+        $('#add_select').on('click',function(){
+            var select = $(this).next('select');
+            var i = $('#count').val();
+            i++;
+            select.clone().insertAfter(select).attr('name','list_'+i).css('margin-right','56px');
+            $('#count').val(i);
+        })
+
+
+        $('.s_ch').each(function(){
+            console.log('go');
+            i = $(this).attr('id').split('s_');
+            i = i[1];
+            console.log(i);
+            $("select[name='list_"+i+"'] [value='"+$(this).val()+"']").attr("selected", "selected");
+
+        })
+//        /([0-2]\d|3[01])\.(0\d|1[012])\.(\d{4})/
+        $('input[name="img"]').on('change',function(){
+            console.log($('input[name="img"]').val());
+            $('#l_img').val($('input[name="img"]').val());
+        })
+        $('#save').on('click',function(){
+            console.log('save');
+            if ($('input[name="name"]').val()=='') {$('input[name="name"]').css('border','solid red 2px');return false;}
+            else {$('input[name="name"]').css('border','');}
+            if ($('input[name="l_img"]').val()=='') {$('input[name="img"]').css('color','red');return false;}
+            else $('input[name="img"]').css('color','#000');
+            var patern =/^(((0[1-9]|[12]\d|3[01])\.(0[13578]|1[02])\.((19|[2-9]\d)\d{2}))|((0[1-9]|[12]\d|30)\.(0[13456789]|1[012])\.((19|[2-9]\d)\d{2}))|((0[1-9]|1\d|2[0-8])\.02\.((19|[2-9]\d)\d{2}))|(29\.02\.((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$/;
+            if($('input[name="date"]').val()==''){$('input[name="date"]').css('border','solid red 2px');return false;}
+            else { if(!patern.test($('input[name="date"]').val())){
+                $('input[name="date"]').css('border','solid red 2px');return false;
+            }else{ $('input[name="date"]').css('border','');}}
+            $("#form").ajaxSubmit({success: function(responseText){
+                // window.location.href = "/admin/#"+$('input[name="id"]').val();
+                console.log($('#change'));
+                $('#change').html(responseText);
+            }
+
+            })
+
+        })
+
+
+    })
+
+
+</script>
+
+<script language="JavaScript">
+    document.onkeydown = checkKeycode
+    function checkKeycode(e) {
+        var keycode;
+        if (window.event) keycode = window.event.keyCode;
+        else if (e) keycode = e.which;
+        if (keycode==116) {return false}
+    }
+</script>
+
+<!-- Удаление -->
+
+<?php
+if ($action == 'del' AND $id)
+{
+    $img=mysql_fetch_array(mysql_query("select img from results where id={$id}"));
+    @unlink($root.'/img/event/'.$img['img']);
+    mysql_query("delete from results where id={$id}");
+    echo '<div class="down">';
+    echo '<span class="green">Событие удалено.</span>';
+    echo '</div>';
+}
+?>
+
+<!-- Добавление -->
+
+<?php
+if ($action == 'add')
+{
+    echo '<form method="POST" action="views/admin/ajax/results/resultsSave.php" enctype="multipart/form-data" name="edit" id="form"><div class="down"><b>Редактирование</b><br /><br />';
+    echo 'Фото*: <input  type="file" accept="image/jpeg" name="img" style="width:700px;float:right;margin-right:30px"><br /><br />';
+    echo '<input type="hidden" id="l_img" value="">';
+    echo '<div style="clear:both"></div>';
+    echo 'Дата*: <input id="date" style="width:700px;float:right;margin-right:30px" name="date" type="text" /><br /><br />';
+    echo 'Наименование*: <input id="name" style="width:700px;float:right;margin-right:30px" name="name" type="text" /><br /><br />';
+    echo '<div style="clear:both"></div>';
+    echo 'Описание: <textarea name="des" rows="4" style="width:700px;float:right;margin-right:30px; margin-bottom:15px"></textarea><br /><br />';
+    echo '<div style="clear:both"></div>';
+    echo 'ФИО автора: <input id="author_name" style="width:700px;float:right;margin-right:30px" name="author_name" type="text" /><br /><br />';
+    echo 'Об авторе: <input id="prof" style="width:700px;float:right;margin-right:30px" name="prof" type="text" /><br /><br />';
+    echo '<div style="clear:both"></div>';
+    echo 'Препарат: <a id="add_select" style="font-size:18px;float:right;margin-right:35px">+</a><select class="list" style="width:680px;float:right;margin-right:6px" name="list_1">';
+    echo $mySelect;
+    echo '</select><input id="count" type="hidden" value="1"><br /><br />';
+    echo '<div style="clear:both"></div>';
+    echo '<span class="help">Поля с * обязательны к заполнению</span><br>';
+    echo '<input type="button" id="save" name="save" value="Сохранить" />';
+    echo'</div></form>';
+}
+?>
+
+
+
+
+
+
+
+
+
+
+<!-- Редактирование -->
+
+<?php
+if ($action == 'edit' AND $id)
+{
+    echo '<style>.td-'.$id.'{background:silver;color:red;} .td-'.$id.' a{color:red}</style>';
+    $edit=mysql_fetch_array(mysql_query("select * from results where id={$id}"));
+    echo '<form method="POST" action="views/admin/ajax/results/resultsSave.php" enctype="multipart/form-data" name="edit" id="form"><div class="down"><b>Редактирование</b><br /><br />';
+    echo 'Фото*: <input  type="file" accept="image/jpeg" name="img" style="width:700px;float:right;margin-right:30px">';
+    if($edit['img']){
+        echo '<br><img src="/img/results/'.$edit['img'].'" style="width:300px"/>';
+        echo '<input type="hidden" id="l_img" value="'.$edit['img'].'">';
+    }else{echo '<input type="hidden" name="l_img" value="">';}
+    echo '<br /><br />';
+    echo '<div style="clear:both"></div>';
+    $date = new DateTime($edit['date']);
+    $date = date_format($date,'d.m.Y');
+    echo 'Дата*: <input id="date" style="width:700px;float:right;margin-right:30px" name="date" type="text" value="'.$date.'"/><br /><br />';
+    echo 'Наименование*: <input id="name" style="width:700px;float:right;margin-right:30px" name="name" type="text" value="'.htmlspecialchars($edit['name']).'"/><br /><br />';
+    echo '<div style="clear:both"></div>';
+    echo 'Описание: <textarea name="des" rows="4" style="width:700px;float:right;margin-right:30px; margin-bottom:15px">'.$edit['des'].'</textarea><br /><br />';
+    echo '<div style="clear:both"></div>';
+    echo 'ФИО автора: <input id="author_name" style="width:700px;float:right;margin-right:30px" name="author_name" type="text" value="'.$edit['author_name'].'"/><br /><br />';
+    echo 'Об авторе: <input id="prof" style="width:700px;float:right;margin-right:30px" name="prof" type="text" value="'.$edit['prof'].'"/><br /><br />';
+    echo '<div style="clear:both"></div>';
+    $gs = explode(';',$edit['list']);
+    echo 'Препарат: <a id="add_select" style="font-size:18px;float:right;margin-right:35px">+</a>
+    <select class="list" style="width:680px;float:right;margin-right:6px" name="list_1">';
+    echo $mySelect;
+    echo '</select>
+    <input class="s_ch" id="s_1" type="hidden" value="'.$gs['0'].'">';
+    if(count($gs) > 1){
+        for($x=2;$x<=count($gs);$x++){
+            echo '<select class="list" style="width:680px;float:right;margin-right:56px" name="list_'.$x.'">';
+            echo $mySelect;
+            echo '</select>
+            <input class="s_ch" id="s_'.$x.'" type="hidden" value="'.$gs[$x-1].'">';
+        }
+    echo '<input id="count" type="hidden" value="'.count($gs).'"><br /><br />';
+    }else{echo '<input id="count" type="hidden" value="1"><br /><br />';}
+    echo '<div style="clear:both"></div>';
+    echo '<span class="help">Поля с * обязательны к заполнению</span><br>';
+    echo '<input type="hidden" name="id" value="'.$id.'"><br /><br />';
+    echo '<input type="button" id="save" name="save" value="Сохранить" />';
+    echo'</div></form>';
+}
+?>
+
+
+
+
+</div>
+<div class="down" style="margin:20px auto">
+    <a type="button" href="admin/results/add">Добавить результат</a>
+</div>
+<table width="100%">
+    <thead>
+    <tr>
+        <td>№</td>
+        <td>Наименование</td>
+        <td>Автор</td>
+        <td>Изменить</td>
+        <td>Удалить</td>
+    </tr>
+    </thead>
+    <?php
+    $q=mysql_query("select * from results");
+    while ($e=mysql_fetch_array($q))
+    {
+        echo '<tr>';
+        echo '<td class="td-'.$e['id'].'">'.(++$n).'</td>';
+        echo '<td class="td-'.$e['id'].'">'.$e['name'].'</td>';
+        echo '<td class="td-'.$e['id'].'">'.$e['author_name'].'</td>';
+        echo '<td class="td-'.$e['id'].'"><a href="admin/results/edit/'.$e['id'].'">Изменить</a></td>';
+        echo '<td class="td-'.$e['id'].'"><a href="admin/results/del/'.$e['id'].'">Удалить</a></td>';
+        echo '</tr>';
+    }
+    ?>
+</table>
+
+
+</div></td></tr>
+

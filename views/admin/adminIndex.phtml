@@ -1,0 +1,53 @@
+<tr>
+<td class='head'>
+<?php
+    $tut = 'index';
+    include "menu.php"; 
+    $db = db :: getInstance();   
+    $form = new ad();
+?>
+</td>
+</tr>
+<tr>
+    <td>
+        <div id="content">
+            <?php
+                $db -> query("SELECT 
+        p.id,
+        p.name,
+        p.img,
+        p.showProd,
+        p.showCat,
+        m.caption
+        FROM 
+        prod AS p
+        INNER JOIN menu AS m ON p.id_razd = m.id
+        ORDER BY p.id_razd");
+                $prods = $db -> getArray();
+                if ($prods) 
+                    echo "<a href='admin/good/add'>Добавить товар</a>";
+                echo "<table border=1 cellspacing=0>";
+                $i = 1;
+                $cat = '';
+                foreach ($prods as $prod){
+                    if ($cat != $prod['caption']){
+                        echo '<tr><td colspan="6"><font size="+2">'.$prod['caption'].'</b></td></tr>';
+                        $cat = $prod['caption'];
+
+                    }
+                    echo '<tr id='.$prod['id'].'>';
+                    echo '<td>'.$i.'</td>';
+                    echo '<td><img style="width:100px" src="'; $tmp = explode('_',$prod['img']); echo ($tmp[1] =='site.jpg') ? 'catalog/img/prod/'.$prod['img'] : '/img/prod/'.$prod['img']; echo '"/></td>';
+                    echo '<td>'.$prod['name'].'</td>';
+                    $SC = ($prod['showCat']) ? 'checked = "checked"' : '';
+                    echo '<td>В каталог <input class="showCat" name="showCat" type="checkbox" '.$SC.'/></td>';
+                    $SP = ($prod['showProd']) ? 'checked = "checked"' : '';
+                    echo '<td>На сайт <input class="showSite" name="showSite" type="checkbox" '.$SP.'/></td>';
+                    echo '<td><a href="admin/good/edit/'.$prod['id'].'">Редактировать</a></td>';
+                    echo '</tr>';
+                $i++;}
+                echo "</table>";
+             ?>
+        </div>
+    </td>
+</tr>

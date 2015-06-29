@@ -1,0 +1,60 @@
+<?php require_once 'menu.php';?>
+<script>
+$(document).ready(function(){
+    (function($) {
+  $.fn.wrapSelected = function(open, close) {
+    return this.each(function() {
+      var textarea = $(this);
+      var value = textarea.val();
+      var start = textarea[0].selectionStart;
+      var end = textarea[0].selectionEnd;
+      if (value.substring(start, end)!=0)
+      textarea.val(
+        value.substr(0, start) + 
+        open + value.substring(start, end) + close + 
+        value.substring(end, value.length)
+      );
+    });
+  };
+})(jQuery);
+
+$("#b").live('click',function(){$("textarea").wrapSelected("<b>", "</b>");return false;})
+$("#i").live('click',function(){$("textarea").wrapSelected("<i>", "</i>");return false;})
+$("#c").live('click',function(){$("textarea").val('')})
+
+$('#save').live('click',function(){
+    $.post('webinar.php', {action:'save',info:$("textarea").val()}, function() {alert('Новое расписание сохранено!') })
+})
+})
+</script>
+<?php
+if ($_POST['action']=='save')
+{
+    //$_POST['info'] = str_replace("'", "&rsquo;", $_POST['info']);
+    
+    $_POST['info']=htmlspecialchars($_POST['info']);
+    $_POST['info'] = str_replace("&lt;", "<", $_POST['info']);
+    $_POST['info'] = str_replace("&gt;", ">", $_POST['info']);
+    
+    mysql_query('UPDATE  `gea`.`webinar` SET info="'.$_POST['info'].'"');
+}
+?>
+<?php $info=mysql_fetch_array(mysql_query("select * from webinar"))?>
+<table style="" cellspacing="1" align="center">
+<tr><td>
+<p style="text-align: center;">Расписание:</p>
+</td></tr>
+<tr><td style="text-align: center;">
+<button id="i" title="Курсив"><i style="font-family: times new roman;">I</i></button>
+<button id="b" title="Жирный"><b>B</b></button> 
+<button id="c" title="Очистить">С</button><br />
+<div class="help">Один Enter новая строка, два - новый абзац.<br />Если поле оставить пустым и сохранить, то раздел Расписание не будет выводиться на сайте.</div>
+<textarea id="info" style="width:870px;height:300px"><?php echo $info['info']?></textarea>
+</td></tr>
+</table>
+
+<div style="text-align: center;border: dotted gray 1px;padding: 5px;width: 888px;margin:10px auto">
+    
+      <button id="save" style="width:100px;height:30px">Сохранить</button>
+    
+</div>

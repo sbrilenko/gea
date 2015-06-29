@@ -1,0 +1,98 @@
+<?php $root=$_SERVER['DOCUMENT_ROOT'];
+    $action = $controller -> getParam(1);
+    $id = (int)$controller -> getParam(2);
+?>
+<tr>
+<td class='head'>
+<?php
+    $tut = 'video';
+    include "menu.php"; 
+    $db = db :: getInstance();   
+    $form = new ad();
+?>
+</td>
+</tr>
+<tr>
+    <td>
+        <div id="content">
+
+<script type="text/javascript">
+$(document).ready(function(){
+    $('#save').on('click',function(){
+    $("#form").ajaxSubmit({success: function(responseText){
+            // window.location.href = "/admin/#"+$('input[name="id"]').val();  
+            console.log($('#change'));
+            $('#change').html(responseText);
+    }
+
+})
+
+})
+})
+</script> 
+<div id="change">
+<!-- Удаление -->
+
+<?php
+if ($action == 'del' AND $id)
+{
+
+    mysql_query("delete from video where id={$id}");
+    echo '<div class="down">';
+    echo '<span class="green">Видео удалено.</span>';
+    echo '</div>';
+}
+?>
+<!-- Добавление -->
+<?php
+if ($action == 'add' or ($action == 'edit' and $id))
+{
+    echo '<style>.td-'.$id.'{background:silver;color:red;} .td-'.$id.' a{color:red}</style>';
+    if ($action == 'edit') $edit=mysql_fetch_array(mysql_query("select * from video where id={$id}"));
+    echo '<form method="POST" action="views/admin/ajax/videos/videoSave.php" enctype="multipart/form-data" name="edit" id="form"><div class="down"><b>Редактор</b><br /><br />';
+        echo 'Введите заголовок:<br /><input style="width:700px;" type="text" name="name" value="'.$edit['name'].'"/><br /><br />';
+        echo 'Ссылка:<br />(На сайте youtube кликните по видео правой кнопкой мыши, выберите пункт "Копировать HTML код", и вставте его сюда)<br /><textarea name="link" style="width:700px; height:100px">'.$edit['link'].'</textarea><br /><br />';
+        echo '<div style="clear:both"></div>';
+        if ($edit['link'])
+        echo $edit['link'];
+        echo '<div style="clear:both"></div><br />';
+        echo '<input type="button" id="save" name="save" value="Сохранить" />';
+        echo '<input type="hidden" name="id" value="'.$id.'"><br /><br />';
+    echo'</div></form>';
+}
+?>
+ 
+
+
+</div>
+
+<div class="down" style="margin:10px auto">
+    <a href="admin/video/add">Добавить видео</a>
+</div>
+<table>
+    <thead>
+        <tr>
+            <td width="100">№</td>
+ 
+            <td>Заголовок</td>
+            <td width="100">Изменить</td>
+            <td width="100">Удалить</td>
+        </tr>
+    </thead>
+    <?php
+    $q=mysql_query("select * from video order by date desc");
+    while ($e=mysql_fetch_array($q))
+    {
+    echo '<tr>';
+        echo '<td class="td-'.$e['id'].'">'.(++$n).'</td>';
+        echo '<td class="td-'.$e['id'].'">'.$e['name'].'</td>';
+        echo '<td class="td-'.$e['id'].'"><a href="admin/video/edit/'.$e['id'].'">Изменить</a></td>';
+        echo '<td class="td-'.$e['id'].'"><a href="admin/video/del/'.$e['id'].'">Удалить</a></td>';
+    echo '</tr>';
+    }
+    ?>
+</table>
+
+
+
+ </div></td></tr>

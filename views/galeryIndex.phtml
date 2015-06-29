@@ -1,0 +1,6 @@
+<?php
+$q = $db->query("SELECT * FROM menu WHERE parentId = 32 AND visibility='1' ORDER BY id DESC");
+$index = $db->getRow();
+header('location: show/'.$index['id']);
+
+?>

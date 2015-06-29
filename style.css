@@ -1,0 +1,331 @@
+html, body {width: 100%; height: 100%; font: 14px/24px Verdana, Arial, sans-serif;}
+.clear {clear: both;}
+.textRight{text-align: right;}
+.textCenter{text-align: center;}
+
+.background-left{background: url('../img/back-left.png') left -200px no-repeat;}
+.background-right{background: url('../img/back-right.png') right -40px no-repeat;}
+#wrapper {
+    width: 100%;
+    min-height: 100%;
+    min-width: 1000px;
+    position: relative;
+}
+
+#main {width: 700px; left: 27%; position: relative; min-height: 400px; padding-bottom: 30px; margin-top: -110px;}
+
+#header {height: 239px; width: 100%; min-width: 1000px; position: relative; background: url('../img/header_gradient.png');}
+#header .one{width: 100%; height: 100%; background: url('../img/header_left.png') top left no-repeat; position: absolute;}
+#header .two{width: 100%; height: 100%; height: 100%; background: url('../img/header_center.png') top center no-repeat; position: absolute;}
+#header .three{width: 100%; height: 100%; height: 100%; background: url('../img/header_right.png') top right no-repeat; position: absolute;}
+#header .logo{width: 230px; height: 71px; background: url('../img/logo.png') top left no-repeat; display: block; position: absolute; left: 20px; top: 15px;}
+#header .rightBlock{width: 250px; position: absolute; right: 10px; top: 15px; position: absolute;}
+#header .rightBlock .buttonPart{position: absolute; margin-top: 18px;}
+#header .rightBlock .buttonPart a{display: block; width: 70px; height: 27px; background: url('../img/enterButton.png') top left no-repeat; text-decoration: none; text-align: center;}
+#header .rightBlock .buttonPart a:hover{background-position: bottom left;}
+#header .rightBlock span{color: #414141 !important; font: 14px Georgia, Arial, sans-serif; position: relative; top: 5px;}
+#header .rightBlock .phones{margin-left: 80px; border-left: 1px dashed #aaa38d; font: 18px Arial, sans-serif; color: #aaa38d;}
+#header .rightBlock .phones .content{margin-left: 15px; padding: 10px 0;}
+
+#footer{ height: 217px; background: url('../img/footer_gradient.png'); position: relative;}
+#footer .one{width: 100%; height: 100%; background: url('../img/footer_left.png') bottom left no-repeat; position: absolute;}
+#footer .two{width: 100%; height: 100%; height: 100%; background: url('../img/footer_center.png') bottom center no-repeat; position: absolute;}
+#footer .three{width: 100%; height: 100%; height: 100%; background: url('../img/footer_right.png') bottom right no-repeat; position: absolute;}
+#footer .right{position: absolute; right: 10px; bottom: 20px;}
+#footer .left{position: absolute; bottom: 20px; left: 20px; color: #151515; font: 14px Arial, sans-serif;}       
+
+/* Меню
+ * -------------------------------------------------------------- */
+#menu {width: 210px; position: absolute; left: 20px; top: 120px;}
+
+#menu ul li {
+    font: 14px Tahoma, Verdana, Arial, Helvetica, sans-serif; 
+    color: #767059;
+    padding-left: 22px;
+    text-decoration: none;
+    margin-top: 15px;
+    background-position: left 5px; 
+    background-repeat: no-repeat; 
+    background-image: url('../img/menu.png');
+    text-transform: uppercase;
+}
+
+#menu ul li a{
+    font: 14px Tahoma, Verdana, Arial, Helvetica, sans-serif; 
+    color: #767059; 
+    text-decoration: none; 
+    border-bottom: 1px dashed #dc0000;
+}
+
+#menu ul li span{color: #b71807; border-bottom: 1px dashed #dc0000;}
+
+#menu ul li a:hover{color: black;}
+#menu ul li.selected {
+    background-position: left 5px; 
+    background-repeat: no-repeat; 
+    background-image: url('../img/menu_selected.png');
+}
+
+#menu .submenu li{
+    padding-left: 12px;
+    margin-top: 10px !important;
+    background-position: left 5px; 
+    background-repeat: no-repeat; 
+    background-image: url('../img/submenu.png');
+    background-position: left 7px;
+    font-family: Tahoma, Verdana, Arial, sans-serif;
+    text-transform: lowercase;
+    font-size: 14px !important;
+}
+#menu .submenu li a{font-size: 14px !important; border-bottom: none;}
+#menu .submenu li.selected{background-image: url('../img/submenu_selected.png'); background-position: left 7px; }
+#menu .submenu li.selected span{border-bottom: none;}
+
+
+p{font: 14px/24px Verdana, Arial, sans-serif; color: #464646; margin: 15px 0; text-indent: 55px;}
+p.ulTitle{margin-bottom: 0;}
+.noindent{text-indent: 0;}
+.center{text-align: center;}
+.bold {font-weight: bold;}
+.italic {font-style: italic;}
+.red {color: #cb0000;}
+.upper{text-transform: uppercase; font-weight: normal;}
+
+.marginTopBot {margin: 30px 0;}
+.no-margin {margin: 0 !important;}
+
+img.foto{float: left; margin-right: 20px; margin-bottom: 20px; border: 1px solid #c0c0c0; margin-top: 20px;}
+
+/* ПРОДУКЦИЯ
+ * -------------------------------------------------------------- */
+.productCaption{font: bold 20px Verdana, Arial, sans-serif; color: #90845d; margin-bottom: 25px;}
+.productCaptionCatalogue{font: bold 16px Verdana, Arial, sans-serif;}
+.productPhoto{width: 332px; height: 332px; background: url('../img/productBackground.png'); text-align: center; float: left; margin-right: 20px; margin-bottom: 20px;}
+.productPhoto table{width: 100%; height: 100%;}
+.productPhoto table td{text-align: center; vertical-align: middle;}
+.priceBlock{position: relative; margin-bottom: 25px;}
+.priceBlock .price{visibility: hidden; position: relative; width: 180px; text-align: center; font: 18px "Times New Roman", serif; color: #171717; background-color: #ffded6; padding: 3px 0;}
+.priceBlock .price span{color: #af0e0e; font-size: 24px;}
+.priceBlock .more{position: absolute; width: 182px; height: 32px; background: url('../img/more.png') top left no-repeat; right: 0; text-align: center; text-decoration: none;}
+.priceBlock .more:hover{background-position: bottom left;}
+.priceBlock .more span{position: relative; top: 6px; font: 18px "times new roman", serif; color: #171717;}
+.priceBlock .docs{position: absolute; width: 182px; height: 32px; background: url('../img/more.png') top left no-repeat; margin-left: 259px; text-align: center; text-decoration: none;}
+.priceBlock .docs:hover{background-position: bottom left;}
+.priceBlock .docs span{position: relative; top: 6px; font: 18px "times new roman", serif; color: #171717;}
+
+.textHeader{font: italic 24px Georgia, "times new roman", serif; color: #dc0000; margin-bottom: 30px; margin-top: 30px;}
+.redBlockOuter{background: url('../img/redFloraTop.png') top left #ffded6 no-repeat;}
+.redBlockInner{padding: 25px; background: url('../img/redFloraBottom.png') bottom right no-repeat; font: 14px/24px Verdana, Arial, sans-serif; color: #464646;}
+
+ul.list{margin-left: 30px; font: 14px/24px Verdana, Arial sans-serif; color: #464646;}
+ul.list li{
+    padding-left: 15px;
+    background-position: left 9px; 
+    background-repeat: no-repeat; 
+    background-image: url('../img/li_marker_text.png');
+}
+ul.noicon li{
+    background-image: none;
+}
+ul.sublist{margin-left: 0px !important;}
+ul.sublist li{
+    padding-left: 11px;
+    background-position: left 10px; 
+    background-repeat: no-repeat; 
+    background-image: url('../img/li_marker_text_sub.png');
+}
+ul.marginable{margin-left: 55px;}
+ul.marginable li{margin-bottom: 15px;}
+
+ul.marginableLeft{margin-left: 55px;}
+ul.sublist{margin-left: 20px;}
+.textSection{display: none;}
+.textSectionBlock{position: relative; margin-bottom: 25px;}
+.textSectionBlock .more{display:block; float:right; width: 182px; height: 32px; background: url('../img/more.png') top left no-repeat; right: 0; text-align: center; text-decoration: none;}
+.textSectionBlock .more:hover{background-position: bottom left;}
+.textSectionBlock .more span{position: relative; top: 6px; font: 18px "times new roman", serif; color: #171717;}
+
+
+
+
+/* ВИДЕО
+ * -------------------------------------------------------------- */                                                             
+.videoBlock{height: 386px; background: url('../img/videoFlora.png') center center no-repeat;}
+.videoBlock .video{margin: 0 auto; width: 320px; height: 240px; position: relative; top: 63px;}
+.videoBlock .hd-360{width: 320px; height: 240px;}
+.videoBlock .hd-480{display: none; width: 480px; height: 360px; top: 0px}
+.video-quality{position: absolute; width: 180px; right: 0;}
+.video-quality .hd-360-select{position: absolute; top: -2px; left: 85px; display: block; width: 43px; height: 25px; background: url('../img/video-quality.png') left top no-repeat;}
+.video-quality .hd-360-select:hover{background-position: left -26px; cursor: pointer;}
+.video-quality .hd-360-selected{background-position: left -52px;}
+.video-quality .hd-360-selected:hover{cursor: default; background-position: left -52px;}
+.video-quality .hd-480-select{position: absolute; top: -2px; left: 135px; display: block; width: 43px; height: 25px; background: url('../img/video-quality.png') left -78px no-repeat;}
+.video-quality .hd-480-select:hover{background-position: left -104px; cursor: pointer;}
+.video-quality .hd-480-selected{background-position: left -130px;}
+.video-quality .hd-480-selected:hover{background-position: left -130px; cursor: default;}
+
+/* СЕТИФИКАТЫ 
+ * -------------------------------------------------------------- */
+.cert-container{float: left; margin-bottom: 65px;}
+.cert-photo-wrapper{float: left; width: 198px; height: 285px; background: url('../img/certificate_background.png'); text-align: center;}
+.cert-photo-wrapper img{position: relative; top: 25px; border: 2px solid #ffded6 !important;}
+.cert-info-container{float: left; width: 400px;}
+.cert-title{font: bold 14px tahoma, sans-serif; color: #90845d; margin-top: 25px;}
+.cert-info{font: 14px verdana, sans-serif; color: #1a1a1a; margin-top: 40px; line-height: 24px;}
+.cert-more{display: block; width: 131px; height: 32px; background: url('../img/cert_more.png') left top no-repeat; text-align: center; text-decoration: none; cursor: pointer; font: 14px georgia, serif; color: #414141 !important; margin-top: 20px;}
+.cert-more:hover{background-position: left bottom; text-decoration: none;}
+.cert-more span{position: relative; top: 7px;}
+.cert-link{color: #464646 !important; text-decoration: underline !important;}
+.cert-link:hover{color: red; text-decoration: none !important;}
+.cert-back{position: absolute; width: 182px; height: 32px; background: url('../img/more.png') top left no-repeat; right: 0; text-align: center; text-decoration: none;}
+.cert-back:hover{background-position: bottom left; text-decoration: none;}
+.cert-back span{position: relative; top: 7px; font: 18px "times new roman", serif; color: #414141; font: 14px georgia, serif;}
+
+
+/* Внимание
+ * -------------------------------------------------------------- */
+.hologram{width: 560px; height: 313px; margin: 25px auto; background: url('../img/hologramBack.png'); text-align: center;}
+.hologram img{position: relative; top: 83px;}
+
+/* Главная
+ * -------------------------------------------------------------- */
+.mainImg{margin-top: -30px; z-index: 100; margin-bottom: 50px; margin-left: -50px;}
+
+/* Маркетинг
+ * -------------------------------------------------------------- */
+.header {text-align: center; font-weight: bold; margin: 30px 0 0px;}
+.marketingTreeContainer{text-align: center; padding-top: 35px;}
+table.rewards {width: 100%;}
+table.rewards td{border: 1px dashed black; padding: 3px 0;}
+table.rewards td.first {text-align: center; border-left: none;}
+table.rewards td.third {text-align: center; border-right: none;}
+table.rewards td.second{padding-left: 20px;}
+table.rewards tr.firstRow td{border-top: 0;}
+table.rewards tr.lastRow td{border-bottom: 0;}
+
+table.prises {width: 100%; margin-top: 15px;}
+table.prises td{border: 1px dashed black; padding: 3px 0; vertical-align: top;}
+table.prises td.first {width: 100px; border-left: none; text-align: left;}
+table.prises td.last {padding-left: 20px; border-right: none;}
+table.prises tr.firstRow td{border-top: 0;}
+table.prises tr.lastRow td{border-bottom: 0;}
+
+.imgTL{padding-top: 35px; padding-left: 35px; background: url('../img/imgTL.png') top left no-repeat; display: inline-block; zoom: 1; margin-top: 15px;}
+.imgBR{padding-bottom: 55px; padding-right: 35px; background: url('../img/imgBR.png') bottom right no-repeat; display: inline-block; zoom: 1;}
+.imgTL img, .imgBR img{border: 1px solid #ffd5c3;}
+.fLeft{float: left;}
+.fRight{float: right;}
+.aRight{text-align: right;}
+.aLeft{text-align: left;}
+a.link{color: #1c1c1c; text-decoration: underline;}
+a.link:hover{text-decoration: none;}
+
+
+/* Главная
+ * -------------------------------------------------------------- */
+.main{width: 700px; height: 473px; background: url('../img/main.png') top left no-repeat; position: relative;}
+.main a{text-decoration: underline; text-transform: uppercase; color: #2a861d; font: 11px/18px Tahoma, Verdana, Arial, Helvetica, sans-serif;}
+.main a:hover{color: #b90000; cursor: pointer;}
+.main a.antives{position: absolute; top: 89px; left: -50px;}
+.main a.capsules{position: absolute; top: 380px; left: -50px;}
+.main a.izoflavoni{position: absolute; top: 5px; left: 225px;}
+.main a.fito{position: absolute; top: 325px; left: 290px;}
+.main a.tamponi{position: absolute; top: 55px; right: -20px;}
+.main a.yod{position: absolute; top: 230px; right: -5px;}
+.main a.capsules-dream{position: absolute; top: 380px; right: -5px;}
+.main .hover{width: 100%; height: 100%; background: url('../img/mainBack.png'); display: none;}
+
+.nav a{color: black; text-decoration: none;}
+.nav a:hover{text-decoration: underline;}
+
+/* Задать вопрос
+ * -------------------------------------------------------------- */
+.leftSide{width: 335px; height: 260px; background-color: #ffded6;position: absolute;}
+.container{position: absolute; top: 15px; left: 20px; right: 20px; bottom: 15px;}
+.qTitle{font: italic 14px Verdana, Arial, sans-serif; color: #2b2b2b; margin-bottom: 4px;}
+.inputWrapper{width: 296px; height: 25px; background: url('../img/input.png') top left no-repeat; position: relative; margin-bottom: 10px;}
+.inputWrapper input{width: 280px; margin-left: 7px; margin-top: 4px; border: 0;}
+.inputWrapper input:focus{outline: none;}
+
+.rightSide{width: 494px; height: 260px; background-color: #ffded6; position: relative; margin-left: 360px;}
+.rightSide .textareaWrapper{width: 451px; height: 194px; background: url('../img/textarea.png') top left no-repeat; border: none;}
+.rightSide .textareaWrapper textarea{width: 440px; height: 182px; border: 0; margin-left: 5px; margin-top: 5px; overflow: hidden;}
+.rightSide .textareaWrapper textarea:focus{outline: 0;}
+
+.bottomSide{margin-left: 20px; margin-top: 40px; position: relative; height: 50px;}
+.bottomSide img{border: 1px solid #d3d3d3; position: absolute; left: 405px; margin-top: -10px;}
+.bottomSide .send{width: 121px; height: 27px; background: url('../img/buttonSend.png') top left no-repeat; position: absolute; left: 715px; top: -3px; text-align: center;}
+.bottomSide .send:hover{text-decoration: none;}
+.bottomSide .send span{position: relative; top: 5px; font: 14px Georgia, "times new roman", serif; color: #414141;}
+.bottomSide .send:hover{background-position: bottom left; cursor: pointer;}
+.inputCaptchWrapper{width: 136px; height: 27px; background: url('../img/inputCaptch.png') top left no-repeat; position: absolute; left: 240px; top: -3px;}
+.inputCaptchWrapper input{width: 120px; margin-left: 7px; margin-top: 4px; border: 0;}
+.inputCaptchWrapper input:focus{outline: 0;}
+
+/* События - галерея
+ * -------------------------------------------------------------- */
+.event{padding-bottom: 50px;}
+.event .list li{float: left; margin-right: 30px;}
+.event .more{bottom: 10px; right: 7px; cursor: pointer; text-decoration: none; padding: 4px 8px; background-color: #f6e7b6; border: 2px solid #d7d7d7; font: 14px Tahoma, Arial, sans-serif; color: #414141;}
+.event .more:hover{background-color: #fffacd;}
+.event .productCaption{margin: 0;}
+.eventTitle{font-weight: bold; color: #464646; margin-left: 55px;}
+.picture{margin-top: 15px;}
+.picture img{position: relative; top: 50%; left: 50%;}
+.uzor-150{width: 150px; height: 119px; float: right; background: url('../img/uzor_150.png') top left no-repeat;}
+.uzor-200{width: 200px; height: 158px; float: right; background: url('../img/uzor_200.png') top left no-repeat;}
+.uzor-250{width: 250px; height: 198px; float: right; background: url('../img/uzor_250.png') top left no-repeat;}
+.uzor-300{width: 300px; height: 238px; float: right; background: url('../img/uzor_300.png') top left no-repeat;}
+.uzor-350{width: 350px; height: 278px; float: right; background: url('../img/uzor_350.png') top left no-repeat;}
+.uzor-400{width: 400px; height: 318px; float: right; background: url('../img/uzor_400.png') top left no-repeat;}
+
+ul.usual{margin-left: 55px; color: #464646;}
+ul.usual li{padding-left: 15px; background: url("../img/li_marker_text.png") left 8px no-repeat;}
+
+.photoButtonBlock{text-align: right;}
+.photoButton{display: block; float: right; width: 123px; height: 27px; background: url('../img/photoButton.png') top left no-repeat; text-decoration: none; text-align: center; color: #414141; font: 14px Georgia, serif;}
+.photoButton:hover{background-position: bottom left; cursor: pointer; text-decoration: none;}
+.photoButton span{position: relative; top: 4px;}
+
+.photo-block{width: 700px; height: 480px; position: fixed; z-index: 1000; background-color: #fcefc3;  border: 1px solid #8d8c8b;}
+.photo-block #photo-container{position: relative; top: 17px; left: 20px; overflow: hidden; width: 654px; height: 445px;}
+.photo-block #photo-wrapper{margin-left: 0;}
+.photo-block img{float: left;}
+.photo-block .close{display: block; width: 11px; height: 10px; background-image: url('../img/photo_close.png'); background-position: top left; background-repeat: no-repeat; position: absolute; top: 5px; right: 5px;}
+.photo-block .next{font: bold 8px tahoma, arial, sans-serif; color: #7a745e; text-transform: uppercase; display: block; padding-right: 17px; background-image: url('../img/photo_next.png'); background-position: center right; background-repeat: no-repeat; position: absolute; bottom: 7px; right: 5px;}
+.photo-block .prev{font: bold 8px tahoma, arial, sans-serif; color: #7a745e; text-transform: uppercase; display: block; padding-left: 17px; background-image: url('../img/photo_prev.png'); background-position: center left; background-repeat: no-repeat; position: absolute; bottom: 7px; left: 5px;}
+.photo-block .tip{width: 100%; bottom: 7px; font: 10px Arial, sans-serif; color: #a0a0a0; position: absolute; width: 100%; text-align: center;}
+.photo-block #mainImg{position: absolute;}
+
+#mainEventsBlock{height: 127px; float: left; margin-left: -50px; width: 750px;}
+#mainEventsBlock .mainEvent{width: 228px; height: 127px; background: url('../img/mainEvent.png'); float: left; position: relative; margin-right: 33px;}
+#mainEventsBlock .mainEventLast{margin-right: 0;}
+#mainEventsBlock .more{position: absolute; bottom: 10px; right: 7px; cursor: pointer; text-decoration: none; padding: 2px 4px; background-color: #f6e7b6; border: 1px solid #d7d7d7; font: 11px Tahoma, Arial, sans-serif; color: #414141;}
+#mainEventsBlock .more:hover{background-color: #fffacd;}
+#mainEventsBlock .img{width: 90px; height: 119px; position: absolute; top: 4px; left: 10px; background: center center no-repeat;}
+#mainEventsBlock .text{width: 133px; position: absolute; top: 45px; right: 3px; font: 12px/18px Verdana, Arial, sans-serif;}
+
+#birthday{margin-top: 25px; background: url('../img/birthday.png') left top no-repeat; font: 18px/30px Verdana, Arial, sans-serif; color: #1a1a1a; height: 268px;}
+#birthday .first{margin-left: 200px; width: 380px;}
+#birthday .second{margin-left: 240px; margin-top: 40px;}
+#birthday .third{margin-left: 280px;}
+#birthday .fourth{margin-left: 320px;}
+#birthday .fifth{margin-left: 360px;}
+
+#march-8{font: 18px/30px Arial, sans-serif; color: #1a1a1a; font-style: italic; margin: 50px auto 0; width: 400px;}
+.march-8-title{font-weight: bold; margin-bottom: 15px; font-size: 24px;}
+.event-image{width: 100%; height: 100%; background-repeat: no-repeat; background-position: center center;}
+
+/* Ошибка 404 */
+.error404 {margin-left: 80px;}
+.error404 p:first-child{font-size: 2.3em; color: #777777;}
+.error404 p{font-size: 1.5em; color: #777777;}
+#text{text-indent: 0px; font-size: 1em; color: #000000; margin-left: 55px;}
+
+/*Паразиты*/
+.parasites{position: relative; top: 50px; font: 12px/18px Verdana, Arial, sans-serif; color: #767059; font-style: italic;}
+.parasites table{width: 100%;}
+.parasites td{text-align: center; padding-bottom: 20px;}
+.parasites img{display: block; margin: auto;}
+a#parasites:link{color:#CB0000;}
+a#parasites:visited{color:#CB0000;}

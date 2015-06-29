@@ -1,0 +1,124 @@
+<tr>
+<td class='head'>
+<?php
+    $tut = 'cover';
+    include "menu.php"; 
+    $db = db :: getInstance();   
+    $db->query("SELECT * FROM wraps");
+    $wraps = $db->getArray();
+    foreach ($wraps as $wrap) {
+    	if($wrap['type'] == 'pdf') $pdf_wrap = $wrap['link'];
+    	if($wrap['type'] == 'pdf_s') $pdf_s_wrap = $wrap['link'];    	
+    	if($wrap['type'] == 'el') $el_wrap = $wrap['link'];
+    }
+    echo $pdf_s_wrap;
+?>
+<script type="text/javascript">
+$(document).ready(function(){
+	$('#pdf').on('change',function(){
+	$('#preview').hide();
+	$('#img_loader_photo_preview').replaceWith("<span id='img_loader_photo_preview'><img style='margin: 0px 8px 5px;' src='/img/admin/l.gif'/> Загрузка</span>");
+	$('#type').val('pdf');
+	var photoLoad = 
+	{
+		url:"views/admin/ajax/covers/photoLoader.php",		
+		success: function(responseText){		
+		//alert(responseText );				
+		var trimed = $.trim(responseText);
+		$('#preview').replaceWith('<img id="preview_pdf" exif="true" src="../catalog/img/'+trimed+'.jpg" style="display:none"/>');
+			$('input[name="photo_url"]').val(trimed);					
+			var newImg = new Image();
+			newImg.src = '../catalog/img/'+trimed+'.jpg';
+			console.log(newImg);
+			console.log($('#preview'));
+			newImg.onload = function(){
+			$('#preview_pdf').exifLoad(function(){							
+			console.log($('#preview_df').exif('XResolution'));
+			console.log($('#preview_pdf').exif('PixelXDimension'));
+			if (($('#preview_pdf').exif('PixelXDimension') == 992) && ($('#preview_pdf').exif('PixelYDimension') == 1116)){
+					if (($('#preview_pdf').exif('XResolution') != 300) && ($('#preview_pdf').exif('YResolution') != 300)){				
+						$('#preview_pdf').hide();
+						$('#error_pdf').show();	
+						$('#img_loader_pdf_preview').replaceWith("<span id='img_loader_pdf_preview'></span>");
+						$('input[name="photo_url"]').val('');
+						$('#error_pdf').html('Изображение не 300 dpi');
+						$.post('views/admin/ajax/products/photoDel.php', {imgToDel : trimed}, function(data){console.log(data);});
+					}else{
+						$('#error_pdf').hide();
+						$('#img_loader_pdf_preview').replaceWith("<span id='img_loader_pdf_preview'></span>");
+						$('#preview_pdf').css('width','500px');
+						$('#preview_pdf').show();				
+					}
+				}else{
+					$('#img_loader_pdf_preview').replaceWith("<span id='img_loader_photo_preview'></span>");
+					$('input[name="photo_url"]').val('');					
+					$('#error_pdf').html('Изображение не заданных размеров');
+					$('#error_pdf').show();
+					$.post('views/admin/ajax/products/photoDel.php', {imgToDel : trimed}, function(data){console.log(data);});
+				}
+});
+		}
+
+		}
+	};
+$('#form').ajaxSubmit(photoLoad);
+})
+
+
+})
+
+
+
+
+
+</script>
+</td>
+</tr>
+<tr><td><div id="content">
+	<form id="form">
+		<input type="hidden" id="type" name="type"/>
+	<table style="width:100%">
+		<tr>
+			<td>Обложка для электронного каталога<br><span class="help">Обязательно!<br>Размер 900x632.<br>Формат JPG или PNG.</span></td>
+			<td>
+				<?php
+				echo '<input type="hidden" name="photo_url" value="'.$el_wrap.'"/>
+						<input type="file" name="el" id="el" accept="image/jpeg"/>	<br/>';
+				$pht = ($el_wrap == null) ? '<img src="" id="preview" style="display:none"/>' :  '<img width ="500px" src="/catalog/img/'.$el_wrap.'" id="preview"/>';
+						echo "<br /><span id='img_loader_photo_preview'></span>";
+						echo $pht;						
+						echo '<span id="error"></span>';
+				?>
+			</td>
+		</tr>
+		<tr>
+			<td rowspan="2">Обложка для каталогав PDF<br><span class="help">Обязательно!<br>Размер 3508х2480!<br>Разрешение 300 dpi!<br>Формат JPG!</span></td>
+			<td>
+				<?php
+				echo '<input type="hidden" name="photo_url" value="'.$pdf_wrap.'"/>
+						<input type="file" name="pdf" id="pdf" accept="image/jpeg"/>	<br/>
+						<span class="help">Верси для печати</span><br>';
+				$pht = ($pdf_wrap == null) ? '<img src="" id="preview_pdf" style="display:none"/>' :  '<img width ="500px" src="/catalog/img/'.$pdf_wrap.'" id="preview"/>';
+						echo "<br /><span id='img_loader_pdf_preview'></span>";
+						echo $pht;						
+						echo '<span id="error_pdf"></span>';
+				?>
+			</td>
+		</tr>
+		<tr>			
+			<td>
+				<?php
+				echo '<span class="help">Верси для просмотра</span><br>';						
+				$pht = ($pdf_s_wrap == null) ? '<img src="" id="preview" style="display:none"/>' :  '<img width ="500px" src="/catalog/img/'.$pdf_s_wrap.'" id="preview"/>';
+						echo $pht;					
+						
+				?>
+			</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td></td>
+		</tr>
+	</table>
+	</form>
+</div></td></tr>

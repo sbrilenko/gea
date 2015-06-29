@@ -1,0 +1,35 @@
+<?php
+    $page->setTitle("GEA | Сертификаты");
+    /*echo "<div class='productCaption'>Сертификаты</div>
+        <p>Тампоны гигиенические «Цигунван», ZB Postatic Navel Plasters, ZB Pain Orthopedics Plasters,прошли клинические испытания и санитарно-эпидемиологическую экспертизу не только в Китае, но и в России, в настоящее время компания ведёт работу по регистрации продукции в Украине, а также международный сертификат GMP.</p>
+        <div class='certifContainer'>
+            <div class='certifBlock certifLeft'><a href='img/certificates/1.1.png' target='_blank'><img src='img/certificates/1.1_thumb.png' alt='certificate' /></a></div>
+            <div class='certifBlock certifRight'><a href='img/certificates/1.2.png' target='_blank'><img src='img/certificates/1.2_thumb.png' alt='certificate' /></a></div>
+        </div>";
+    
+    echo "<p>Продукция отечественных производителей имеет все необходимые регистрационные документы.</p>
+        <div class='certifContainer'>
+            <div class='certifBlock certifLeft'><a href='img/certificates/2.1.png' target='_blank'><img src='img/certificates/2.1_thumb.png' alt='certificate' /></a></div>
+            <div class='certifBlock certifRight'><a href='img/certificates/2.2.png' target='_blank'><img src='img/certificates/2.2_thumb.png' alt='certificate' /></a></div>
+        </div>";
+       
+    echo "  <div class='redBlockOuter'>
+                <div class='redBlockInner'>
+                    <p>Фититампоы, ортопедические и урологические пластыри прошли клинические испытания и санитарно-эпидемиологическую экспертизу не только в Китае, но и в России, а также  предприятие, производящее данную продукцию,  имеет  международный сертификат GMP. В настоящее время компания ведёт работу по регистрации продукции в Украине.</p>
+                </div>
+            </div>";*/
+    
+    $type = $control->params[0];
+    $id = $control->params[1];
+    $page->title="GEA | Документы";
+	// echo "<a class='cert-back' href='#'><span>Вернуться к товару</span></a>";
+	echo "<div class='productCaption'>Документы к продукции</div>";
+	
+	switch ($type){
+		case "product"	: echo (isProductId($id)) ? getCertificatesByProduct($id) : getAllCertificates(); break;
+		case "group"	: echo (isGroupId($id)) ? getCertificatesByGroup($id) : getAllCertificates(); break;
+		default 		: echo getAllCertificates();
+	}
+	
+?>
+<div class='clear'></div>

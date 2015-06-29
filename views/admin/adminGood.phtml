@@ -1,0 +1,363 @@
+<?php
+    $action = $controller -> getParam(1);
+    $id = (int)$controller -> getParam(2);
+?>
+<script>
+ $(document).ready(function() {
+
+(function($) {
+  $.fn.wrapSelected = function(open, close) {
+    return this.each(function() {
+      var textarea = $(this);
+      var value = textarea.val();
+      var start = textarea[0].selectionStart;
+      var end = textarea[0].selectionEnd;
+      if (value.substring(start, end)!=0)
+      textarea.val(
+        value.substr(0, start) + 
+        open + value.substring(start, end) + close + 
+        value.substring(end, value.length)
+      );
+    });
+  };
+})(jQuery);
+
+function isNotMax(e){
+	e = e || window.event;
+	var target = e.target || e.srcElement;
+	var code=e.keyCode?e.keyCode:(e.which?e.which:e.charCode)
+
+	switch (code){
+		case 13:
+		case 8:
+		case 9:
+		case 46:
+		case 37:
+		case 38:
+		case 39:
+		case 40:
+			return true;
+	}
+	return target.value.length <= target.getAttribute('maxlength');
+}
+
+
+$('#photo').on('change',function(){
+	$('#preview').hide();
+	$('#img_loader_photo_preview').replaceWith("<span id='img_loader_photo_preview'><img style='margin: 0px 8px 5px;' src='/img/admin/l.gif'/> Загрузка</span>");
+	var photoLoad = 
+	{
+		url:"views/admin/ajax/products/photoLoader.php",		
+		success: function(responseText){		
+		//alert(responseText );				
+		var trimed = $.trim(responseText);
+		$('#preview').replaceWith('<img id="preview" exif="true" src="../catalog/img/prod/'+trimed+'.jpg" style="display:none"/>');
+			$('input[name="photo_url"]').val(trimed);					
+			var newImg = new Image();
+			newImg.src = '../catalog/img/prod/'+trimed+'.jpg';
+			console.log(newImg);
+			console.log($('#preview'));
+			newImg.onload = function(){
+			$('#preview').exifLoad(function(){							
+			console.log($('#preview').exif('XResolution'));
+			console.log($('#preview').exif('PixelXDimension'));
+			if (($('#preview').exif('PixelXDimension') == 992) && ($('#preview').exif('PixelYDimension') == 1116)){
+					if (($('#preview').exif('XResolution') != 300) && ($('#preview').exif('YResolution') != 300)){				
+						$('#preview').hide();
+						$('#error').show();	
+						$('#img_loader_photo_preview').replaceWith("<span id='img_loader_photo_preview'></span>");
+						$('input[name="photo_url"]').val('');
+						$('#error').html('Изображение не 300 dpi');
+						$.post('views/admin/ajax/products/photoDel.php', {imgToDel : trimed}, function(data){console.log(data);});
+					}else{
+						$('#error').hide();
+						$('#img_loader_photo_preview').replaceWith("<span id='img_loader_photo_preview'></span>");
+						$('#preview').css('width','400px');
+						$('#preview').show();				
+					}
+				}else{
+					$('#img_loader_photo_preview').replaceWith("<span id='img_loader_photo_preview'></span>");
+					$('input[name="photo_url"]').val('');					
+					$('#error').html('Изображение не заданных размеров');
+					$('#error').show();
+					$.post('views/admin/ajax/products/photoDel.php', {imgToDel : trimed}, function(data){console.log(data);});
+				}
+});
+		}
+
+		}
+	};
+$('#form').ajaxSubmit(photoLoad);
+})
+
+
+$('#t_0').on('keyup',function(){
+	$('#sd_length').html('Введено '+$(this).val().length+' символов.');
+})
+
+$(".b").on('click',function(){$("textarea#t_"+$(this).attr('id').split('_')[1]).wrapSelected("<b>", "</b>");return false;})
+$(".i").on('click',function(){$("textarea#t_"+$(this).attr('id').split('_')[1]).wrapSelected("<i>", "</i>");return false;})
+$(".h").on('click',function(){$("textarea#t_"+$(this).attr('id').split('_')[1]).wrapSelected("<h2>", "</h2>");return false;})
+$(".l").on('click',function(){
+	var y=prompt('Введите URL','http://');
+	if (y.substr(8,1))
+{
+	$("textarea#t_"+$(this).attr('id').split('_')[1]).wrapSelected('<a href="'+y+'">', '</a>');
+	console.log('<a href="'+y+'">');
+	return false;
+}
+})
+function insert_text_cursor(_obj_name, _text)
+// _obj_name - name объекта - как правило, textarea, но при желании можно сделать любой
+// указываем именно NAME, так как согласно стандартам DOCTYPE HTML 4.01 strict и выше
+// свойство ID у объектов ввода является не приемлемым и требуется обращаться только name
+// _text - текст, который требуется вставить в том место, где сейчас находится курсор
+{
+// берем объект
+var area=document.getElementsByName(_obj_name).item(0);
+
+// Mozilla и другие НОРМАЛЬНЫЕ браузеры
+if ((area.selectionStart)||(area.selectionStart=='0'))
+{ // определяем, где начало выделения, если оно существует
+  var p_start=area.selectionStart;
+
+  // определяем, где заканчивается выдедение, если оно существует
+  var p_end=area.selectionEnd;
+
+  // вставляем соответствующий текст в указанное место
+  area.value=area.value.substring(0,p_start)+_text+area.value.substring(p_end,area.value.length);
+}
+
+// Исправляем очередной геморрой с Internet Explorer
+// единственный НЕ человеческий браузер
+if (document.selection)// если объект может иметь выделения
+{ // передаем фокус ввода на нужный нам объект
+  area.focus();
+
+  // узнаем выделение, если оно существует 
+  sel=document.selection.createRange();
+
+  // вставляет текст в указанное место
+  sel.text=_text;
+}
+}// end function
+// $(".l").live('click',function(){
+// var y=prompt('Введите URL','http://');
+// if (y.substr(8,1))
+// {
+//    y2=y.substr(7);
+//     insert_text_cursor('t_'+$(this).attr('id').split('_')[1], ' <a href="'+y+'">'+y2+'</a> ');
+// }
+
+// return false;
+// })
+
+var m=1;
+if ($('#number_of_des').val()>0) m=$('#number_of_des').val();
+$('#add_sub').live('click',function(){
+    m++;
+    $("#add_block").after("<tr> <td>Заголовок</td> <td><input class='min_des' id='name_"+m+"' name='name_"+m+"' type='text' size='90'/></td> </tr><tr> <td>Текст</td> <td><textarea class='min_des_text' id='t_"+m+"' name='t_"+m+"' type='text' rows='10' cols='100'></textarea></td><td><button type='button' id='i_"+m+"' class='i' title='Курсив'><i style='font-family: times new roman;'>I</i></button><button type='button' id='b_"+m+"' class='b' title='Жирный'><b>B</b></button> <button type='button' id='l_"+m+"' class='l' title='Cсылка'>URL</button> <br /></td> </tr>");
+   $('html, body').animate({scrollTop: $('#content').height()+'px'}, 1000);
+   $('#number_of_des').val(m);
+    return false;
+})
+
+
+$('#save').live('click',function(){//alert ($('.min_des').size());
+    if ($('select[name="razd"]').val()==0) {$('select[name="razd"]').css('border','solid red 2px');$('html, body').animate({scrollTop: 0}, 1000);}
+        else {$('select[name="razd"]').css('border','');
+            if ($('input[name="name"]').val()=='') {$('input[name="name"]').css('border','solid red 2px');$('html, body').animate({scrollTop: 0}, 1000);}
+                else {$('input[name="name"]').css('border','');
+                   // if ($('input[name="price"]').val()=='') {$('input[name="price"]').css('border','solid red 2px');$('html, body').animate({scrollTop: 0}, 1000);}
+                     //   else {$('input[name="price"]').css('border','');
+                            if (($('input[name="photo_url"]').val()=='')&&($('#showCat').attr("checked")=='checked')) {$('input[name="photo"]').css('color','red');$('html, body').animate({scrollTop: 0}, 1000);}
+                                else {$('input[name="photo"]').css('color','black');                    
+                                    if ($('textarea[name="t_0"]').val()=='') {$('textarea[name="t_0"]').css('border','solid red 2px');$('html, body').animate({scrollTop: 0}, 1000);}
+                                        else {$('textarea[name="t_0"]').css('border','');                        
+                                            //if ($('.min_des').size()<1) {$('#add_sub').css('color','red');$('html, body').animate({scrollTop: 0}, 1000);}
+                                              //  else {$('#add_sub').css('color','black');
+                                                    //if ($('.min_des:first').val()=='') {$('.min_des:first').css('border','solid red 2px');$('html, body').animate({scrollTop: 0}, 1000);}
+                                                      //  else {$('.min_des:first').css('border','');                                
+                                                       //     if ($('textarea.min_des_text:first').val()=='') {$('textarea.min_des_text:first').css('border','solid red 2px');$('html, body').animate({scrollTop: 0}, 1000);}
+                                                         //       else {$('textarea.min_des_text:first').css('border','');//alert('OK!');
+                                                                $('*').css('cursor','pointer');
+                                                                $('button, input, select').css('background-color','silver');
+                                                                $("#form").ajaxSubmit({success: function(responseText){
+                                                                		if(responseText.slice(-5)=='done!'){
+                                                                			window.location.href = "/admin/#"+$('input[name="id"]').val();	
+                                                                			
+                                                                		}
+                                                                	}
+                                                            	});
+                                                                            
+                                                                }}}}//}}}}
+                                                                return false;
+})
+
+
+
+$("#razd [value='"+$('#razd_sel').val()+"']").attr("selected", "selected");
+})
+ 
+</script>
+<?php
+// Редактирование товара //
+	function showForm($db, $id=null, $name=null, $cat=null, $photo=null, $s_des=null, $f_des=null, $showCat=null, $showProd=null, $doc=null, $edit=null){
+		if($photo){
+			$photo = explode('_', $photo);
+			$photo = $photo[0];
+		}
+		echo '<form id="form" method="post" enctype="multipart/form-data" action="views/admin/ajax/products/prodSave.php">';
+		echo "<input type='hidden' name='id' value='".$id."'/>";
+		echo "<table cellspacing=1 >";
+			echo "<tr>";
+				echo "<td>Название</td>";
+				echo "<td colspan='2'><input name='name' type='text' value='".$name."' size='90'/></td>";
+			echo "</tr>";
+			echo "<tr>";
+				echo "<td>Раздел</td>";
+				echo "<td colspan='2'>";
+				echo "<select name='razd' id='razd'><option value='0'>Выберите раздел</option>";				    
+				    $db -> query('SELECT * FROM  menu WHERE parentId=2 and id!=25');
+				    $categories = $db -> getArray();
+				    foreach($categories as $category){
+				    echo "<option value='".$category['id']."'>".$category['caption']."</option>";				   
+					}
+				echo "</select>";
+				echo "<input type='hidden' id='razd_sel' name='razd_sel' value='".$cat."'/>";
+				echo "</td>";
+			echo "</tr>";
+			echo "<tr>";
+				echo '<td>Документы <br /><span class="help">Только цифры!<br />Через пробел</span></td>';
+				echo '<td colspan="2"><input type="text" name="doc" value="'.$doc.'"/></td>';
+			echo "</tr>";
+			echo "<tr>";
+			echo "<td>На сайт:<br /><span class='help'>Если убрать галочку товар <b>на сайте</b> отображаться не будет.</span></td>";
+			$showP = ($showProd) ? 'checked="checked"' : '';
+			echo "<td colspan='2'><input type='checkbox' id='showProd' name='showProd'".$showP."/></td>";
+			echo "</tr>";
+			echo "<tr>";
+			echo "<td>В каталог:<br /><span class='help'>Если убрать галочку товар <b>в каталоге</b> отображаться не будет.</span></td>";
+			$showC = ($showCat) ? 'checked="checked"' : '';
+			echo "<td colspan='2'><input type='checkbox' id='showCat' name='showCat'".$showC."/></td>";
+			echo "</tr>";
+
+			echo "<tr>";
+				echo "<td>Фото<br><span class='help'>Обязательно!<br>Разрешение 300dpi.<br>Размер 992х1116.</span></td>";
+				echo '<td colspan="2">
+						<input type="hidden" name="photo_url" value="'.$photo.'"/>
+						<input type="file" name="photo" id="photo" accept="image/jpeg"/>	<br/>';
+				$pht = ($photo == null) ? '<img src="" id="preview" style="display:none"/>' :  '<img src="/catalog/img/prod/'.$photo.'_big.jpg" id="preview"/>';
+						echo "<br /><span id='img_loader_photo_preview'></span>";
+						echo $pht;						
+						echo '<span id="error"></span>					
+						</td>';
+			echo "</tr>";			
+			echo "<tr>";
+				echo "<td>Краткое описание<br><span class='help'>Не более 500 символов</span><br><span class='help' id='sd_length'></span></td>";
+				echo '<td>					
+					<span class="help">Один Enter новая строка, два - новый абзац.</span>
+					<br />
+					<textarea id="t_0" name="t_0" rows="10" cols="100" maxlength="500" onkeypressed="return isNotMax(event)">'.$s_des.'</textarea>
+					</td>
+					<td>					
+					<button type="button" id="b_0" class="b" title="Жирный"><b>B</b></button><br/>
+					<button type="button" id="l_0" class="l" title="Cсылка">URL</button>
+					</td>';
+			echo "</tr>";
+			echo "<tr>";
+				echo "<td colspan='3' align='center'><b>Подробно о товаре</b></td>";
+			echo "</tr>";	
+			echo "<tr>";
+				echo "<td colspan='3' align='center'><b>Для каталога</b></td>";
+			echo "</tr>";
+			echo "<tr>";
+				echo "<td>Текст</td>";				
+				echo '<td>
+                    <span class="help">Для корректного отображения текста на сайте не стоит использовать предложения длиннее 2 строк и помещать в скобочки более 5 слов</span><br>
+					<span class="help">Один Enter новая строка, два - новый абзац.</span>
+					<br />
+					<textarea id="t_1" name="t_1" rows="40" cols="100" >'.$f_des.'</textarea>
+					</td>
+					<td>					
+					<button type="button" id="b_1" class="b" title="Жирный"><b>B</b></button><br>
+					<button type="button" id="h_1" class="h" title="Заголовок"><font size="+1">H2</font></button> <br>
+					<button type="button" id="l_1" class="l" title="Cсылка">URL</button>
+					</td>';
+			echo "</tr>";
+			echo "<tr>";
+				echo "<td colspan='3' align='center'><b>Для сайта</b></td>";
+			echo "</tr>";
+			echo "<tr id='add_block'>";
+				echo '<td colspan="3" style="text-align: center;">';
+					echo '<button id="add_sub" type="button" style="width: 200px;height:30px;margin: 0 20px"><b>Добавить подпункт</b></button><br />';
+					echo '<span class="help" style="float: left;">Для удаления очистите поля и сохраните.</span>';
+				echo '</td>';
+			echo '</tr>';
+			if ($edit)
+				{
+				    $q2=mysql_query("select * from gea.prod_des where id_prod='".$id."'");
+				    $j=1;
+				    while($des=mysql_fetch_array($q2))
+				    {
+				        $j++;
+				        echo "
+				        <tr> 
+				            <td>Заголовок</td> 
+				            <td colspan='2'><input class='min_des' id='name_".$j."' name='name_".$j."' type='text' value='".$des['title']."' size='90'/></td> 
+				        </tr>
+				        <tr> 
+				            <td>Текст</td> 
+				            <td>				                
+				                <span class='help'>Один Enter новая строка, два - новый абзац.</span>
+				                <br />
+				                <textarea class='min_des_text' id='t_".$j."' name='t_".$j."' type='text' rows='10' cols='100'>".$des['text']."</textarea>
+				            </td> 
+				            <td>
+				            	<button type='button' id='i_".$j."' class='i' title='Курсив'><i style='font-family: times new roman;'>I</i></button>
+				                <button type='button' id='b_".$j."' class='b' title='Жирный'><b>B</b></button> 
+				                <button type='button' id='l_".$j."' class='l' title='Cсылка'>URL</button> 
+				            </td>
+				        </tr>";
+				    }
+				    echo "<input id='number_of_des' name='number_of_des' type='hidden' value='".$j."'>";
+				}
+			echo "<tr>";
+			echo "<td colspan='3'align=center><input id='save' type='button' value='Сохранить'/></td>";
+			echo "</tr>";
+		echo "</table>";	
+
+
+	}
+
+		$db -> query("SELECT * FROM prod WHERE id = {$id}");
+		$prod = $db -> getRow();
+		$db -> query("SELECT * FROM cat_prod_des WHERE prod_id = {$id}");
+		$catalog = $db -> getRow();
+				echo '<tr>
+				<td class="head">';
+			    $tut = 'good';
+			    include "menu.php"; 
+			    $db = db :: getInstance();   
+			    $form = new ad();	
+
+	if ($action == 'edit' AND $id){
+			
+		echo '</td></tr>';
+		echo '<tr><td><div id="content">';
+		showForm($db, $prod['id'], $prod['name'], $prod['id_razd'], $catalog['photo'], $catalog['short_des'], $catalog['full_des'], $prod['showCat'], $prod['showProd'], $prod['doc'],1);
+		echo '</div></td></tr>';
+	}
+
+	if ($action == 'add'){
+			
+		echo '</td></tr>';
+		echo '<tr><td><div id="content">';
+		showForm($db);
+		echo '</div></td></tr>';
+	}
+
+
+
+
+ ?>

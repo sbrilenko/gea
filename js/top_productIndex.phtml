@@ -1,0 +1,43 @@
+<?
+    $db->query("SELECT cpd.photo, p.name, cpd.link, tp.id, tp.prod_id
+                FROM cat_prod_des AS cpd, top_prods AS tp, prod AS p
+                WHERE tp.prod_id = cpd.prod_id
+                AND p.id = cpd.prod_id");
+    $tops = $db->getArray();
+    print_r($tops);
+
+?>
+<div class="wrap">
+
+    <div class="main_page">
+        <ul class="menu menu_tovar top_prod_page">
+            <div class="f_l">
+                <li class="li_1"><a href=""><div class="hover"><div class="text-before text_before_img text_before_img_top"><div class="imgage"><img class="imag" src="img/top_prod_1.png"/></div><div class="text text_after_img">Белый кофе с органической красной ганодермой</div></div></div></a></li>
+                <li class="li_2"><a href=""><div class="hover"><div class="text-before text_before_img text_before_img_top"><div class="imgage"><img  class="imag" src="img/product_img_menu_1.png"/></div><div class="text text_after_img">Витагор</div></div></div></a></li>
+                <li class="li_2"><a href=""><div class="hover"><div class="text-before text_before_img text_before_img_top"><div class="imgage"><img  class="imag" src="img/product_img_menu_1.png"/></div><div class="text text_after_img">Шамбала</div></div></div></a></li>
+                <li class="li_1"><a href=""><div class="hover"><div class="text-before text_before_img text_before_img_top"><div class="imgage"><img class="imag" src="img/top_prod_2.png"/></div><div class="text text_after_img">Урологический пластырь</div></div></div></a></li>
+            </div>
+            <div class="f_r">
+                <li class="li_2"><a href=""><div class="hover"><div class="text-before text_before_img text_before_img_top"><div class="imgage"><img class="imag" src="img/product_img_menu_1.png"/></div><div class="text text_after_img">Пластырь&nbsp;на&nbsp;стопы&nbsp;с пудрой вулканической&nbsp;лавы</div></div></div></a></li>
+                <li class="li_2"><a href=""><div class="hover"><div class="text-before text_before_img text_before_img_top"><div class="imgage"><img class="imag" src="img/product_img_menu.png"/></div><div class="text text_after_img">Ковчег&nbsp;мужчины</div></div></div></a></li>
+                <li class="li_1"><a href=""><div class="hover"><div class="text-before text_before_img text_before_img_top"><div class="imgage"><img class="imag" src="img/top_prod_3.png"/></div><div class="text text_after_img">Зубная паста с пчелиным маточным молочком и грибом Линчжи </div></div></div></a></li>
+                <li class="li_2"><a href=""><div class="hover"><div class="text-before text_before_img text_before_img_top"><div class="imgage"><img class="imag" src="img/product_img_menu.png"/></div><div class="text text_after_img">Восстановление&nbsp;Витагор</div></div></div></a></li>
+                <li class="li_2"><a href=""><div class="hover"><div class="text-before text_before_img text_before_img_top"><div class="imgage"><img class="imag" src="img/product_img_menu_1.png"/></div><div class="text text_after_img">Здоровье Амплифир</div></div></div></a></li>
+                <li class="li_2"><a href=""><div class="hover"><div class="text-before text_before_img text_before_img_top"><div class="imgage"><img class="imag" src="img/product_img_menu_1.png"/></div><div class="text text_after_img">Витагор&nbsp;эффект</div></div></div></a></li>
+                <li class="li_2"><a href=""><div class="hover"><div class="text-before text_before_img text_before_img_top"><div class="imgage"><img class="imag" src="img/product_img_menu_1.png"/></div><div class="text text_after_img">Витагор&nbsp;эффект</div></div></div></a></li>
+
+            </div>
+        </ul>
+    </div>
+    <a href="#" class=" left_ar"> </a>
+    <a href="#" class="right_ar"></a>
+    <?php include 'lib/menu_bot.php';    ?>
+
+
+</div>
+
+
+
+
+
+

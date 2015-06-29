@@ -1,0 +1,13 @@
+<?php
+		if($controller->hasParam('article')){
+				$article = $controller->getParam('article');
+			 echo '<a class="cert-back" href="#"> <span>Назад</span></a>';
+			 
+             echo "<div class='nav'><a href='/articles/'>Информационные статьи </a></div>";
+			 echo '<div><br/><div>';
+             require_once("views/articles/article_{$article}.phtml");
+         }else{
+         	require_once('404.phtml');
+         }
+         
+?>

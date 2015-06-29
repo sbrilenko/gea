@@ -1,0 +1,48 @@
+<?php
+$page->setTitle("GEA | Результаты применение");
+echo "<div class='productCaption'>Результаты применения</div>";
+$db->query("SELECT * FROM results ORDER BY date DESC");
+$results = $db->getArray();
+?>
+<div class="results">
+        <?php
+            foreach($results as $result){
+               echo '<div class="result">
+                    <div class="for_res_img">
+                    <a target="_blank" href="/ajax/waterMark.php?img='.$result['img'].'">
+                    <img class="res_img"  src="/img/results/m_'.$result['img'].'" style="width:156px">
+                    </a></div>';
+                    $date = new DateTime($result['date']);
+                    $date = date_format($date,'d.m.Y');
+                    echo '<div class="res_info">
+                            <div class="res_date">'.$date.'</div>
+                            <div class="res_name">'.$result['name'].'</div>
+                            <div class="res_text">'.$result['des'].'</div>
+                            <div class="res_a_name">'.$result['author_name'].'</div>
+                            <div class="res_text">'.$result['prof'].'</div>
+                            </div>';
+                    $gs = explode(';',$result['list']);
+                    echo '<div class="res_btns">';
+                        if(count($gs)>0){
+                            for($i=0;$i<count($gs);$i++){
+                                $id = $gs[$i];
+                                $q = 'SELECT name FROM prod WHERE id ='.$id;
+                                $db->query($q);
+                                $prod_name = $db->getValue();
+                                echo '<a class="res_btn" href="/products/info/full/'.$gs[$i].'">'.$prod_name.'</a><br>';
+                            }
+                        }
+
+                    echo '</div><div class="clear"></div>';
+                    echo '<a class="res_more res_btn" target="_blank" href="/ajax/waterMark.php?img='.$result['img'].'">Подробнее</a>';
+                    echo '</div><div class="clear"></div>';
+
+            }
+        if(count($results)>10){echo '<a class="res_btn res_next" href="/results/page/1">Следующая страница</a>';}
+        ?>
+</div>
+
+
+<?php
+
+?>

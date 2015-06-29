@@ -1,0 +1,63 @@
+<div id="bottom_hiden" class="bottom_hid">
+    <div id="bottom-f">
+        <div class="footer_top">
+            <div class="more_margin">
+                <a class="f_left" href="index">На главную</a>
+                <div id="download_catalog" class="f_right" style="cursor: pointer">Скачать каталог</div>
+                <a id="click-catalog" class="f_center" >Каталог</a>
+            </div>
+        </div>
+<!-- ul menu -->
+ <ul class="menu">
+ 	<?
+ 		$db->query("SELECT
+				p.id,
+		        p.name,
+		        m.id AS sub,		        
+		        m.caption,
+		        cpd.photo,
+		        cpd.short_des,
+		        cpd.full_des
+		        FROM
+		        cat_prod_des AS cpd,
+		        prod AS p
+		        INNER JOIN menu AS m ON p.id_razd = m.id
+		        WHERE
+		        p.showProd = 1
+		        AND
+		        cpd.prod_id = p.id
+		        ORDER BY p.id_razd");
+		$products = $db->getArray();
+		$cat = '';
+		foreach ($products as $product) {
+			if($cat != $product['caption']){
+			echo '<li><a id="sub_'.$product['sub'].'"><div class="hover"><div class="text-before"><div class="text">'.$product['caption'].'</div></div></div></a></li>';
+			$cat = $product['caption'];
+			}
+        }
+	?>
+</ul>
+<ul class="menu menu_tovar display_none" >
+<!-- ul menu_tovar -->
+</ul>
+
+ <div class="footer_bot  " >
+            <div class="more_margin">
+                <a class="f_left_content" href="content">Содержание</a>
+                <a id="2click-catalog" class="f_right_hide" href="">Свернуть разделы</a>
+                <a id="click-prew" class="f_right_hide display_none" >Вернуться назад</a>
+                <p class="f_center_content_now" ></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="get_pdf" style="display: none; position: absolute; width: 300px; height: 250px; margin: auto; top:50%;
+left: 50%; background: #fff">
+    <form name="get_pdf" action="/lib/pdf.php" target="_blank" method="POST">
+        Выберите тип каталога
+        <input type="radio" name="pdf" value="full" checked=""/> Полный
+        <input type="radio" name="pdf" value="short" /> Сокращенный (без подробного описания)
+        <input type="submit" value="Загрузить" /><input type="button" value="Отмена" />
+    </form>
+</div>

@@ -1,0 +1,103 @@
+<?php $root=$_SERVER['DOCUMENT_ROOT'];?>
+<?php require_once $root.'/editor/menu.php'?>
+<style>
+
+</style>
+
+ 
+</script>
+
+ 
+<!-- Удаление -->
+
+<?php
+if ($_GET['del'])
+{
+
+    mysql_query("delete from video where id={$_GET['del']}");
+    echo '<div class="down">';
+    echo '<span class="green">Видео удалено.</span>';
+    echo '</div>';
+}
+?>
+<!-- Добавление -->
+<?php
+if ($_POST['add'] or $_GET['edit'])
+{
+    echo '<style>.td-'.$_GET['edit'].'{background:silver;color:red;} .td-'.$_GET['edit'].' a{color:red}</style>';
+    if ($_GET['edit']) $edit=mysql_fetch_array(mysql_query("select * from video where id={$_GET['edit']}"));
+    echo '<form method="POST" action="video.php" enctype="multipart/form-data" name="edit"><div class="down"><b>Редактор</b><br /><br />';
+        echo 'Введите заголовок:<br /><input style="width:700px;" type="text" name="name" value="'.$edit['name'].'"/><br /><br />';
+        echo 'Ссылка:<br />(На сайте youtube кликните по видео правой кнопкой мыши, выберите пункт "Копировать HTML код", и вставте его сюда)<br /><textarea name="link" style="width:700px; height:100px">'.$edit['link'].'</textarea><br /><br />';
+        echo '<div style="clear:both"></div>';
+        if ($edit['link'])
+        echo $edit['link'];
+        echo '<div style="clear:both"></div><br />';
+        echo '<input type="submit" name="save" value="Сохранить" />';
+        echo '<input type="hidden" name="id" value="'.$_GET['edit'].'"><br /><br />';
+    echo'</div></form>';
+}
+?>
+ 
+
+
+
+
+<!-- Обработка инфы -->
+
+<?php
+if ($_POST['save'])
+{   
+    $name = htmlspecialchars(strip_tags($_POST['name']));
+    $link = $_POST['link'];
+    echo '<div class="down">';
+    if ($_POST['id'])
+    {
+        if (mysql_query("UPDATE  `video` SET `name` = '{$name}', `link` = '{$link}' WHERE id = {$_POST['id']}")) echo '<span class="green">Видео было записано успешно.</span><br />'; 
+        else echo '<span class="red">Error. Видео не было сохранено!</span>';            
+    }
+    else
+    {
+        $is = mysql_fetch_array(mysql_query("select * from video where link = '{$link}'"));
+        if (!$is)
+        {
+        if (mysql_query("INSERT INTO  `video` (`name`, `link`) VALUES ('{$name}', '{$link}')")) echo '<span class="green">Новое Видео было записано успешно.</span><br />'; 
+        else echo '<span class="red">Error. Видео не было сохранено!</span>';            
+        }
+    }
+    echo '</div>';
+}
+?>
+
+<div class="down" style="margin:10px auto">
+    <form method="POST" action="video.php">
+        <input type="submit" value="Добавить видео" name="add"/>
+    </form>
+</div>
+<table>
+    <thead>
+        <tr>
+            <td width="100">№</td>
+ 
+            <td>Заголовок</td>
+            <td width="100">Изменить</td>
+            <td width="100">Удалить</td>
+        </tr>
+    </thead>
+    <?php
+    $q=mysql_query("select * from video order by date desc");
+    while ($e=mysql_fetch_array($q))
+    {
+    echo '<tr>';
+        echo '<td class="td-'.$e['id'].'">'.(++$n).'</td>';
+        echo '<td class="td-'.$e['id'].'">'.$e['name'].'</td>';
+        echo '<td class="td-'.$e['id'].'"><a href="'.$url.'?edit='.$e['id'].'">Изменить</a></td>';
+        echo '<td class="td-'.$e['id'].'"><a href="'.$url.'?del='.$e['id'].'">Удалить</a></td>';
+    echo '</tr>';
+    }
+    ?>
+</table>
+
+
+
+ 

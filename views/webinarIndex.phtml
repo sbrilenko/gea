@@ -1,0 +1,116 @@
+<?php
+    $page->title = "GEA | Вебинар";
+    
+    echo "<div class='productCaption'>Вебинар</div>";
+?>
+<style>
+img{border: solid silver 1px;}
+a.link{text-decoration: underline;color: #009;}
+a.link:visited{text-decoration: underline;color: #505;}
+a.link:hover{text-decoration: none;}
+</style>
+<?php
+$infos=@mysql_fetch_array(mysql_query("select * from webinar"));
+$info =str_replace(array ("\r\r", "\n\n"), '</p><p>', $infos['info']);
+$info =str_replace(array ("\r\r", "\n\n"), '</p><p>', $info);
+$info ='<p>'.str_replace(array ("\r\r", "\n\n"), '</p><p>', $info).'</p>';
+
+$info =str_replace(array ("\r", "\n"), '<br />', $info);
+$info =str_replace(array ("\r", "\n"), '<br />', $info);
+?>
+
+<?php if ($infos['info']!=''){?>
+<div class="textHeader">Расписание</div>
+<?php echo $info;?>
+<br />
+<!--<p>10.04.12 г. в 12-00 и 20-00 по московскому времени тема: <strong>&laquo;Женское здоровье&raquo;</strong>.</p>
+<p>12.04.12 г. в 12-00 и 20-00 по московскому времени тема : <strong>&laquo;Влияние на организм человека электромагнитного излучения и средства защиты от ЭМИ&raquo;</strong>.</p>
+-->
+<?php }?>
+<p align="center"><a class="link" href="http://login.meetcheap.com/conference,geagroupltd?NO-BROWSER" target="_blank" style=" padding: 20px 0 20px 70px;"><img src="img/webinar/chat.png" style="position: absolute;margin-left: -65px;margin-top: -10px;"/>Войти в онлайн-конференцию</a></p>
+
+<br />
+<br />
+
+<div class="textHeader">Как это работает</div>
+
+<p>Для принятия участия в вебинаре на Вашем компьютере должен быть установлен <a class="link" href="http://get.adobe.com/ru/flashplayer/" target="_blank">Adobe&nbsp;Flash&nbsp;Player</a>.</p>
+<p>После перехода по ссылке "<a class="link" href="http://login.meetcheap.com/conference,geagroupltd?NO-BROWSER" target="_blank">Войти в онлайн-конференцию</a>", Вам необходимо будет ввести свое имя (см.&nbsp;рис.&nbsp;1) и нажать на кнопку OK (см.&nbsp;рис.&nbsp;2)</p>
+
+<div style="text-align: center;">
+<img src="img/webinar/enter-name.jpg" />
+<br />
+рис. 1
+</div>
+<br />
+<div style="text-align: center;">
+<img src="img/webinar/enter-ok.jpg" />
+<br />
+рис. 2
+</div>
+<br />
+
+<p>Перед Вами появяться 3 области:<br />
+1. Выступающий;<br />
+2. Чат;<br />
+3. Пользователи.<br />
+</p>
+
+
+<p>Если Вы хотите написать сообщение в чат воспользуйтесь строкой, расположенной внизу области "Чат" (см.&nbsp;рис.&nbsp;3).</p>
+
+<div style="text-align: center;">
+<img src="img/webinar/chat-write.jpg" width="700"/>
+<br />
+рис. 3
+</div>
+<br />
+
+<p>После того как Вы ввели весь текст который хотите отправить нажмите на кнопку "Послать" (см.&nbsp;рис.&nbsp;4).</p>
+
+<div style="text-align: center;">
+<img src="img/webinar/chat-send.jpg" width="700"/>
+<br />
+рис. 4
+</div>
+<br />
+
+<!--
+<p>Также проверьте чтобы у Вас был включен звук и микрофон.</p>
+<p>Если Вы хотите высказаться нажмите кнопку "Говорить!" (см. рис. 5).</p> 
+
+<div style="text-align: center;">
+<img src="img/webinar/sp1.jpg" />
+<br />
+рис. 5
+</div>
+<br />
+
+<p>После нажатия на кнопку, возможно появление диалогового окна, где необходимо нажать на кнопку "Разрешить" (см. рис. 6).</p>
+
+<div style="text-align: center;">
+<img src="img/webinar/speak-access.jpg" />
+<br />
+рис. 6
+</div>
+<br />
+
+<p>И когда надпись на кнопке и иконка сменят свой цвет на красный, Вы можете начать говорить. После завершение своей речи снова нажмите на кнопку "Говорить!", для отключения этой функции.</p>
+<p>Если у Вас медленный интернет, то желательно отключите функции получение аудио потока и получения видео потока, кликнув на соответствующие кнопки, расположенные внизу страницы онлайн-конференции (см. рис. 7).</p>
+
+<div style="text-align: center;">
+<img src="img/webinar/av.jpg" />
+<br />
+рис. 7
+</div>
+<br />
+
+<p>Для увеличения громкости динамиков или микрофона можете воспользоваться ползунками, которы расположены рядом с кнопкой "Говорить!". (рис. 8)</p>
+
+<div style="text-align: center;">
+<img src="img/webinar/polz.jpg" />
+<br />
+рис. 8
+</div>
+<br />-->
+
