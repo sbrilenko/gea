@@ -25,7 +25,7 @@ if($_POST['rest'] OR $_POST['deliv'])
         <table border="0" cellpadding="0" cellspacing="0" width="600" style="0px solid transparent;">
             <tbody><tr>    
                     <td align="left" style="padding-bottom:15px;">
-                       <a href="http://test5.abz.dn.ua"><img src="http://test5.abz.dn.ua/img/p-l.jpg" ></a>
+                       <a href="#"><img src="../img/p-l.jpg" ></a>
                   </td>  
                    <td valign="top" align="right" nowrap="" style="line-height: 12px;font-family:Arial;font-size:12px;color:#b4afa1;">
                         <table>
@@ -140,7 +140,6 @@ if($_POST['rest'] OR $_POST['deliv'])
             }
            $sms->sendsms('lyufari','+380954570088',"Заказ с сайта #".$uid." на сумму ".$total);
            $sms->sendsms('lyufari','+380508482849',"Заказ с сайта #".$uid." на сумму ".$total);
-           //$sms->sendsms('abz.dn.ua','+380996777968',"Спасибо. Заказ #".$uid."\nМы свяжемся с вами в ближайшее время.");
            $smsid=$sms->smsresultbynumb(1);//id
         }
         $sql="INSERT INTO orderd (uid,smsid,data_create,date,name,phone,nameevent,peoplecount,comment,address,zakaz) VALUES('%s','%s','".date('Y-m-d H:i:s')."','%s','%s','".$_POST['phone']."','%s',%d,'%s','%s','%s')";
@@ -204,7 +203,7 @@ if($_POST['rest'] OR $_POST['deliv'])
         }
         $dan_f .="</table></td></tr>";
         $dan_foot ='<tr>
-                <td colspan="2"><img style="margin-top:23px;" src="http://test5.abz.dn.ua/img/p-f.jpg"/></td>
+                <td colspan="2"><img style="margin-top:23px;" src="../img/p-f.jpg"/></td>
             </tr>
             <tr>
                 <td colspan="2" height="44"></td>
